@@ -1,0 +1,195 @@
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+   Reset Css
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+
+body{
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+a{
+    text-decoration: none;
+    color: black;
+}
+
+/*header styles start*/
+
+nav{
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #f3e9f1;
+    box-shadow: 1px 1px 10px 3px rgb(214, 214, 214);
+}
+
+ul{
+    list-style: none;
+}
+
+.navigation{
+    display: flex;
+    padding-top: 17px;
+}
+.navigation li{
+    margin-left: 15px;
+    font-weight: 500;
+}
+
+.navigation i{
+    font-size: 20px;
+    margin-left: 5px;
+}
+
+.logoBrand img{
+    height: 55px;
+
+}
+/*header styles end*/
+
+/*main styles start*/
+main{
+    margin: 20px;
+    
+}
+h1{
+    font-size: 22px;  
+}
+
+h2{
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+/*cards style start*/
+.product__cards{
+    margin-top: 30px;
+}
+.card{
+    background-color: #ffffff;
+    box-shadow: 1px 1px 6px 4px rgb(202, 202, 202);
+    border-radius: 20px;
+    width: 100%;
+    height: fit-content;
+    padding-bottom: 20px;
+    margin-bottom: 30px;
+    
+}
+.card img{
+    height: 85%;
+    width: 100%;
+    object-fit: cover;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+}
+.card ul{
+    display: flex;
+    margin-left: 10px;
+}
+
+/*couleurs disponible start*/
+.card ul li{
+    height: 20px;
+    width: 20px;
+    margin-right: 20px;
+    border-radius: 30px;
+    border: solid 2px black;
+    margin-top: 15px;
+}
+.tan{
+    background-color: tan;  
+}
+.chocolate{
+    background-color: chocolate;
+}
+.black{
+    background-color: black;
+}
+.white{
+    background-color: white;
+}
+.palebrown{
+    background-color:rgb(238, 204, 174) ;
+}
+
+.darkbrown{
+    background-color: rgb(70, 0, 0);
+}
+
+.brown{
+    background-color: brown;
+}
+.blue{
+    background-color: blue;
+}
+.pink{
+    background-color: pink;
+}
+.beige{
+    background-color: beige
+}
+/*couleurs disponible end*/
+
+/*card description start*/
+.card__description{
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 5px;
+    display: flex;
+    justify-content: space-between;
+}
+
+h3{
+    font-size: 20px;
+    font-weight: 500; 
+}
+
+.price{
+    font-size: 18px;
+}
+/*card description end*/
+
+/*cards style end*/
+/*main styles end*/
+
+/*footer start*/
+footer{
+    background-color: #b3b3b3;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.liste__footer{
+    line-height: 28px;
+    font-size: 16px;
+}
+.socials{
+    line-height: 30px;
+}
+.socials i{
+    font-size: 25px;
+}
+
+/*footer end*/
+
