@@ -1,7 +1,6 @@
 /* http://meyerweb.com/eric/tools/css/reset/ 
    v2.0 | 20110126
    License: none (public domain)
-   Reset Css
 */
 
 html, body, div, span, applet, object, iframe,
@@ -25,171 +24,149 @@ time, mark, audio, video {
 	vertical-align: baseline;
 }
 
-body{
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-}
 a{
     text-decoration: none;
     color: black;
 }
 
-/*header styles start*/
+.logo{
+    margin-left: 20px;
+    line-height: 50px;
+    font-weight: bold;
+}
 
 nav{
-    display: flex;
-    justify-content: space-between;
-    padding: 10px;
-    background-color: #f3e9f1;
-    box-shadow: 1px 1px 10px 3px rgb(214, 214, 214);
+margin-bottom: 30px;
+background-color: #f3e9f1;
+height: 60px;
 }
 
+.menuItem{
+    display: flex;
+    float: right;
+    position: relative;
+}
 ul{
-    list-style: none;
+    list-style-type: none;
+   width: 100%;  
 }
 
-.navigation{
-    display: flex;
-    padding-top: 17px;
-}
-.navigation li{
-    margin-left: 15px;
-    font-weight: 500;
+#navItems{
+    display: none;
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.794);
+    text-align: center;
 }
 
-.navigation i{
-    font-size: 20px;
-    margin-left: 5px;
-}
-
-.logoBrand img{
-    height: 55px;
-
-}
-/*header styles end*/
-
-/*main styles start*/
-main{
-    margin: 20px;
-    
-}
-h1{
-    font-size: 22px;  
-}
-
-h2{
-    font-size: 16px;
-    margin-top: 10px;
-}
-
-/*cards style start*/
-.product__cards{
-    margin-top: 30px;
-}
-.card{
-    background-color: #ffffff;
-    box-shadow: 1px 1px 6px 4px rgb(202, 202, 202);
-    border-radius: 20px;
-    width: 100%;
-    height: fit-content;
-    padding-bottom: 20px;
-    margin-bottom: 30px;
-    
-}
-.card img{
-    height: 85%;
-    width: 100%;
-    object-fit: cover;
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
-}
-.card ul{
-    display: flex;
-    margin-left: 10px;
-}
-
-/*couleurs disponible start*/
-.card ul li{
-    height: 20px;
-    width: 20px;
-    margin-right: 20px;
-    border-radius: 30px;
-    border: solid 2px black;
-    margin-top: 15px;
-}
-.tan{
-    background-color: tan;  
-}
-.chocolate{
-    background-color: chocolate;
-}
-.black{
-    background-color: black;
-}
-.white{
-    background-color: white;
-}
-.palebrown{
-    background-color:rgb(238, 204, 174) ;
-}
-
-.darkbrown{
-    background-color: rgb(70, 0, 0);
-}
-
-.brown{
-    background-color: brown;
-}
-.blue{
-    background-color: blue;
-}
-.pink{
-    background-color: pink;
-}
-.beige{
-    background-color: beige
-}
-/*couleurs disponible end*/
-
-/*card description start*/
-.card__description{
-    margin-left: 10px;
-    margin-right: 10px;
-    margin-top: 5px;
-    display: flex;
-    justify-content: space-between;
-}
-
-h3{
-    font-size: 20px;
-    font-weight: 500; 
-}
-
-.price{
+#navItems  li{
+    border-bottom: solid 2px black;
+    color: whitesmoke;
+    padding: 5px;
     font-size: 18px;
 }
-/*card description end*/
-
-/*cards style end*/
-/*main styles end*/
-
-/*footer start*/
-footer{
-    background-color: #b3b3b3;
-    padding: 20px;
-    display: flex;
-    justify-content: space-between;
+.fa-shopping-bag{
+    visibility: hidden;
 }
 
-.liste__footer{
-    line-height: 28px;
-    font-size: 16px;
+.logo img{
+    width: 95px;
+    margin-top: 5px;
+    object-fit: cover;
+}
+button {
+    width: 30px;
+    margin-right: 8px;
+    background-color: transparent;
+    border: none;
+    float: right;
+    cursor: pointer;
+    line-height: 55px;
+}
+
+button i{
+    font-size: 20px;
+}
+
+body{
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+
+h1{
+    color: rgb(46, 46, 54);
+    font-size: 30px;
+    font-weight: bold;
+}
+
+#bear{
+    background-color: paleturquoise;
+    width: 100%;
+    padding: 10px;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+#myTeddy {
+background-color: palevioletred;
+   height: fit-content;
+   margin: 5px;
+}
+
+#teddyImage {
+    background-color: powderblue;
+    width: 100%;
+    height: 50%;
+    object-fit:contain;
+}
+
+#teddyName{
+    background-color: rebeccapurple;
+    height: 15px;
+    width: 50%;
+}
+
+#teddyPrice{
+    background-color: salmon;
+    height: 15px; 
+    width: 50%;
+    margin-top: 5px;
+}
+
+#teddyColors{
+    background-color: steelblue;
+    height: 15px; 
+    width: 50%;
+    margin-top: 5px;
+}
+
+#teddyInfo{
+    background-color: violet;
+    height: 15px; 
+    width: 50%;
+    margin-top: 5px;
+}
+
+/*footer*/
+footer{
+margin-top: 20px;
+background-color: #f3e9f1;
+padding: 10px;
+}
+
+.logoF img{
+    width: 65px;
+}
+.navFooter{
+    margin-top: 10px;
+
 }
 .socials{
-    line-height: 30px;
+    display: flex;
+    margin-top: 10px;
+    justify-content: space-between;
+    width: 20%;
 }
 .socials i{
-    font-size: 25px;
+    font-size: 20px;
 }
-
-/*footer end*/
-
