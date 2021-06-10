@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Votre panier - Orinoco</title>
     <link rel="stylesheet" href="style.css">
+    <script src="index.js"></script>
     <script src="https://kit.fontawesome.com/7e4732a8a2.js" crossorigin="anonymous"></script>
 </head>
 <body>
@@ -22,7 +23,68 @@
     </header>
     
     
-    <main></main>
+    <main>
+        <div id="panier">
+            <table>
+                <thead>
+                <tr>
+                    <th>PRODUIT</th>
+                    <th>COULEUR</th>
+                    <th>QUANTITE</th>
+                    <th>PRIX</th>
+                </tr>   
+                </thead>
+                <tbody>
+                    <tr class="itemPanier">
+                        <td class="produitImage">
+                            <img src="images/teddy_1.jpg" alt="">
+                            <div class="nom">Teddy Name</div>
+                        </td>
+                        <td>
+                            <div class="couleur">Color</div>
+                        </td>
+                        <td>
+                            <div class="quantité">quantité</div>
+                        </td>
+                        <td>
+                            <div class="prix">prix</div>
+                        </td>
+                    </tr>
+                 </tbody>
+                 <tfoot>
+                     <tr>
+                         <td></td>
+                         <td></td>
+                         <td>Prix total:</td>
+                         <td>en €</td>
+                     </tr>
+                 </tfoot>  
+            </table>
+        </div>      
+
+        <form action="#" id="identification" >
+            <p>Vos coordonnées</p>
+                <label for="nom">Nom</label>
+                <input type="text" name="nom" id="nom">
+
+                <label for="prenom">Prenom</label>
+                <input type="text" name="prenom" id="prenom">
+                
+                <label for="adress">Adresse</label>
+                <input type="text" name="adress" id="adress">
+        </form>
+
+        <form action="#" id="paiement">
+            <p>Paiement sécurisé</p>
+                <label for="numCarte"></label>
+                <input type="number" name="numCarte" id="numCarte" placeholder="numéro de carte" ><br>
+                <label for="dateExp"></label>
+                <input type="text" name="dateExp" id="dateExp" placeholder="MM/AA" ><br>
+                <label for="CVV"></label>
+                <input type="number" name="CVV" id="CVV" placeholder="CVV">
+        </form>
+    
+    </main>
 
     <footer>
         <a href="#/" class="logoF"><img src="images/logoOrinoco.png" alt="logo"></a>
@@ -37,7 +99,6 @@
             <li><a href="#/"><i class="fab fa-instagram"></i></a></li>
         </ul>
     </footer>
-    
-    
+   
 </body>
 </html>

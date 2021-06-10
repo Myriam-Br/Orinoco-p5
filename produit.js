@@ -54,6 +54,6 @@ fetch('http://localhost:3000/api/teddies')
     console.table(data);
     var myTeddyName = document.getElementById('teddyName');
     myTeddyName.innerHTML = data[0].name;
-})
+});
 
 
