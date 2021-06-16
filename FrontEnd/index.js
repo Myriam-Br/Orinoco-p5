@@ -149,12 +149,14 @@ let idOurs = urlParams.get("id");
 console.log(window.location.search)
 if (idOurs){
     getOursById(idOurs);
+    console.log('produit')
 }
-else if(window.location.pathname === "/projet5-Orinoco/panier.html"){
-
+else if(window.location.pathname === "/projet5-Orinoco/FrontEnd/panier.html" || window.location.pathname == "/panier.html"){
+    console.log('panier')
 }
 else{
     getOursList();
+    console.log('index')
 };
 
 
