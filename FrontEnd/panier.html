@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Votre panier - Orinoco</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <script src="https://kit.fontawesome.com/7e4732a8a2.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="index.html" class="logo"><img src="images/logoOrinoco.png" alt="logo"></a>
+            <button id="btn" class="btn" onclick="toggleNav()"><i class="fas fa-bars"></i></button>
+            <ul id="navItems">
+                <li>Accueil</li>
+                <li>Panier<i class="fas fa-shopping-bag"></i></li>
+            </ul>
+        </nav>
+    </header>
+    
+    
+    <main>
+        <div id="panier"></div>      
+
+        <form id='form'>
+            <div id="identification">
+                <p>Vos coordonnées</p>
+                    <label for="nom">Nom</label>
+                    <input type="text" name="nom" id="nom" required>
+
+                    <label for="prenom">Prenom</label>
+                    <input type="text" name="prenom" id="prenom" required>
+                    
+                    <label for="adresse">Adresse postale</label>
+                    <input type="text" name="adresse" id="adresse" required>
+            </div>
+
+            <div id="paiement">
+                <p>Paiement sécurisé</p>
+                    <label for="numCarte"></label>
+                    <input type="number" name="numCarte" id="numCarte" placeholder="numéro de carte" required/><br>
+                    <label for="dateExp"></label>
+                    <input type="date" name="dateExp" id="dateExp" value="2021-01-01" required/><br>
+                    <label for="codeSecu"></label>
+                    <input type="text" name="codeSecu" id="codeSecu" placeholder="CVV"  required/>               
+            </div> 
+            <button type="submit" id="submit-btn" aria-label="valider votre commande" >Valider votre paiement</button>            
+        </form>
+
+    
+    </main>
+
+    <footer>
+        <a href="#/" class="logoF"><img src="images/logoOrinoco.png" alt="logo"></a>
+        <ul class="navFooter">
+            <li><a href="#/"> Politique de confidentialité</a></li>
+            <li><a href="#/">Mentions légale</a></li>
+            <li><a href="mailto:orinoco@contact.com">Contact</a> </li>
+        </ul>
+        <ul class="socials">
+            <li><a href="#/"><i class="fab fa-facebook-f"></i></a></li>
+            <li><a href="#/"><i class="fab fa-twitter"></i></a></li>
+            <li><a href="#/"><i class="fab fa-instagram"></i></a></li>
+        </ul>
+    </footer>
+  <script src="index.js"></script>
+</body>
+</html>
