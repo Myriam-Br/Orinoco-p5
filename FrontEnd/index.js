@@ -151,7 +151,7 @@ if (idOurs){
     getOursById(idOurs);
     console.log('produit')
 }
-else if(window.location.pathname === "/projet5-Orinoco/FrontEnd/panier.html" || window.location.pathname == "/panier.html"){
+else if(window.location.pathname === "/Orinoco-p5/FrontEnd/panier.html" || window.location.pathname == "/panier.html"){
     console.log('panier')
 }
 else{
