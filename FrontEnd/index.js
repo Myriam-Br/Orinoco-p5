@@ -1,5 +1,3 @@
-var products = [];
-
 // toggle navigation//
 var menu = document.getElementById('btn');
 var navItems = document.getElementById('navItems');
@@ -121,13 +119,11 @@ function getOursList(){
     fetch ('http://localhost:3000/api/teddies')
     .then (res=>res.json())
     .then (data =>{ 
-        products = data;
         //console.log(data);
         for (let i=0; i < data.length; i++){
             //console.log("myAPI", data[i])
             cardOurs(data[i]); 
-        }  
-       
+        }        
     })  
 }; 
 
@@ -161,7 +157,7 @@ else{
 
 
 
-/*fetch("http://localhost:3000/api/teddies/order", {
+fetch("http://localhost:3000/api/teddies/order", {
 	method: 'POST',
 	headers: { 
 'Accept': 'application/json', 
@@ -171,14 +167,19 @@ else{
         contact:{
             firstName : 'a',
             lastName: 'b',
-            adress : 'f',
+            address : 'f',
             city: 'd',
             email:'c'
         },
-        products:[products];
-    })
-});*/
- 
+        products:['5be9c8541c9d440000665243']
+    })   
+})
+
+.then (res=>res.json())
+.then (data =>{ 
+    console.log(data)     
+}); 
+
 
 
 
