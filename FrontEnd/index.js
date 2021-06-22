@@ -112,8 +112,12 @@ function cardOursProduit(ours){
         myTeddy.appendChild(myTeddyInfo); 
         myTeddyInfo.setAttribute('class', 'teddyInfo');
         myTeddyInfo.innerHTML  = ours.description;
+                   
+        var commander = document.getElementById('btn-commander');
+        commander.setAttribute("href", "panier.html");
 
 };
+
 
 function getOursList(){
     fetch ('http://localhost:3000/api/teddies')
@@ -121,8 +125,9 @@ function getOursList(){
     .then (data =>{ 
         //console.log(data);
         for (let i=0; i < data.length; i++){
-            //console.log("myAPI", data[i])
+            console.log("myAPI", data[i])
             cardOurs(data[i]); 
+    
         }        
     })  
 }; 
@@ -131,7 +136,8 @@ function getOursById(id){
     fetch ('http://localhost:3000/api/teddies/'+id )
     .then (res=>res.json())
     .then (data =>{
-        console.log(data); 
+        console.log("id",data); 
+        console.log(id);
         cardOursProduit(data);
     })
 }; 
@@ -140,9 +146,11 @@ function getOursById(id){
 var queryString = window.location.search;
 var urlParams = new URLSearchParams(queryString);
 let idOurs = urlParams.get("id");
-//let panier = urlParams.get("page")
-//console.log(idOurs)
-console.log(window.location.search)
+console.log(window.location.search);
+console.log(idOurs);
+//let panier = urlParams.get("page");
+
+
 if (idOurs){
     getOursById(idOurs);
     console.log('produit')
@@ -155,8 +163,22 @@ else{
     console.log('index')
 };
 
+/*function createDiv(ours){
+var demoTeddy = document.querySelector('.demoteddy');
+
+var demoTeddyName = document.createElement('div');
+demoTeddy.appendChild(demoTeddyName);
+demoTeddyName.setAttribute('class', 'demoTeddyName');
+demoTeddyName.innerHTML = 'my teddy name';
+
+var demoTeddyPrice= document.createElement('div');
+demoTeddy.appendChild(demoTeddyPrice);
+demoTeddyPrice.setAttribute('class', 'demoTeddyPrice');
+demoTeddyPrice.innerHTML = ours.products;
+};*/
 
 
+//pour la validation de la commande
 fetch("http://localhost:3000/api/teddies/order", {
 	method: 'POST',
 	headers: { 
@@ -165,20 +187,40 @@ fetch("http://localhost:3000/api/teddies/order", {
 },
 	body: JSON.stringify({
         contact:{
-            firstName : 'a',
-            lastName: 'b',
-            address : 'f',
-            city: 'd',
-            email:'c'
+            firstName : 'firstName',
+            lastName: 'lastName',
+            address : 'address',
+            city: 'city',
+            email:'email'
         },
-        products:['5be9c8541c9d440000665243']
+        products:[]   
     })   
 })
-
 .then (res=>res.json())
+
 .then (data =>{ 
-    console.log(data)     
+    console.log("myDataPost",data);
+    console.log(data.products);
+    console.log(data.contact);
+    data.products.push('product1');
+    console.log(window.localStorage);
+    /*localStorage.setItem ('contact', data.contact.address);
+    var contactFirstName = localStorage.getItem('contact');
+    console.log(contactFirstName);*/
+
+   /* let inputFirstName = document.getElementById('firstName').value;
+    window.localStorage.setItem('server', inputFirstName);*/
+    console.log(window.localStorage.setItem('order', data.contact.firstName));
+    console.log(window.localStorage.getItem('order'));
 }); 
+
+
+console.log(localStorage);
+
+
+
+
+ 
 
 
 

@@ -23,31 +23,30 @@
     
     
     <main>
-        <div id="bear"></div>      
+        <div id="bear"></div>  
+        <div class="demoteddy">
+        </div>
 
         <form id='form'>
             <div id="identification">
                 <p>Vos coordonnées</p>
-                    <label for="nom">Nom</label>
-                    <input type="text" name="nom" id="nom" required>
+                    <label for="firstName">Nom</label>
+                    <input type="text" name="firstName" id="firstName" required>
 
-                    <label for="prenom">Prenom</label>
-                    <input type="text" name="prenom" id="prenom" required>
+                    <label for="lastName">Prenom</label>
+                    <input type="text" name="lastName" id="lastName" required>
                     
-                    <label for="adresse">Adresse postale</label>
-                    <input type="text" name="adresse" id="adresse" required>
-            </div>
+                    <label for="address">Adresse postale</label>
+                    <input type="text" name="adresse" id="address" required>
 
-            <div id="paiement">
-                <p>Paiement sécurisé</p>
-                    <label for="numCarte"></label>
-                    <input type="number" name="numCarte" id="numCarte" placeholder="numéro de carte" required/><br>
-                    <label for="dateExp"></label>
-                    <input type="date" name="dateExp" id="dateExp" value="2021-01-01" required/><br>
-                    <label for="codeSecu"></label>
-                    <input type="text" name="codeSecu" id="codeSecu" placeholder="CVV"  required/>               
-            </div> 
-            <button type="submit" id="submit-btn" aria-label="valider votre commande" >Valider votre paiement</button>            
+                    <label for="city">Ville</label>
+                    <input type="text" name="city" id="city" required>
+
+                    <label for="email">E-mail</label>
+                    <input type="text" name="email" id="email" required>
+            </div>
+            <button type="submit" id="submit-btn" aria-label="valider votre commande" >Valider votre commande</button>
+
         </form>
 
     
