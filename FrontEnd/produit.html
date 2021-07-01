@@ -7,7 +7,7 @@
     <title>Ours en pelluche - Orinoco</title>
     <link rel="stylesheet" href="style.css">
    <script src="https://kit.fontawesome.com/7e4732a8a2.js" crossorigin="anonymous"></script>
-   <script src="index.js" defer></script>
+   <script src="app.js" defer></script>
 </head>
 <body>
     <header>
@@ -23,9 +23,25 @@
     
 
     <main>
-        <div id="bear"></div>
-        
-        <a class="btn-commander" id="btn-commander"><i class="fas fa-cart-plus"></i>Ajouter au panier</a>
+        <div id="product-container">
+            <h1>Votre produit</h1>
+            
+            <div id="item-container"></div>
+    
+            <div id="product-card">
+                <div id="item">
+                    <img src="" alt="#" id="item-image">
+                    <div id="item-name"></div>
+                    <label for="color" id="selection-color">Sélectionner votre couleur</label>
+                    <select name="color" id="color">
+                    </select>
+                    <div id="item-price"></div>
+                    <div id="item-description"></div>
+                    <button id="btn-commander" type="submit">Commander</button>
+                </div>
+            </div>      
+        </div>
+    
     </main>
 
     <footer>

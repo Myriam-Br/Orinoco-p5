@@ -7,7 +7,7 @@
     <title>Votre panier - Orinoco</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://kit.fontawesome.com/7e4732a8a2.js" crossorigin="anonymous"></script>
-    <script src="index.js" defer></script>
+    <script src="app.js" defer></script>
 </head>
 <body>
     <header>
@@ -20,36 +20,52 @@
             </ul>
         </nav>
     </header>
-    
-    
+      
     <main>
-        <div id="bear"></div>  
-        <div class="demoteddy">
-        </div>
-
-        <form id='form'>
-            <div id="identification">
-                <p>Vos coordonnées</p>
-                    <label for="firstName">Nom</label>
-                    <input type="text" name="firstName" id="firstName" required>
-
-                    <label for="lastName">Prenom</label>
-                    <input type="text" name="lastName" id="lastName" required>
+        <div id="mon-panier">
+            <h1>Votre panier</h1>
+        
+            <div>
+                <table id="panier">
+                    <thead>
+                    <tr>
+                        <th>NOM</th>
+                        <th>COLOR</th>
+                        <th>PRICE</th>
+                        <th>QUANTITE</th>
+                    </tr>
+                    </thead>
+                    <tbody id="item-panier-container">
+                    </tbody>
                     
-                    <label for="address">Adresse postale</label>
-                    <input type="text" name="adresse" id="address" required>
-
-                    <label for="city">Ville</label>
-                    <input type="text" name="city" id="city" required>
-
-                    <label for="email">E-mail</label>
-                    <input type="text" name="email" id="email" required>
+                </table>
             </div>
-            <button type="submit" id="submit-btn" aria-label="valider votre commande" >Valider votre commande</button>
-
-        </form>
-
-    
+        
+            <div id="total">
+                <p>Total de la commander:</p>
+                <span id="total-price">€</span>
+            </div>
+        
+            <form id="formulaire-paiement">
+                <label for="user-firstname">Nom</label>
+                <input type="text" name="user-firstname" id="user-firstname"><br>
+        
+                <label for="user-lastname">Prenom</label>
+                <input type="text" name="user-lastname" id="user-lastname"><br>
+        
+                <label for="user-address">Adresse</label>
+                <input type="text" name="user-address" id="user-address"><br>
+        
+                <label for="user-city">Ville</label>
+                <input type="text" name="user-city" id="user-city"><br>
+        
+                <label for="user-email">E-mail</label>
+                <input type="text" name="user-email" id="user-email"><br>
+            </form>
+        
+            <button type="submit" id="btn-valider-commande">Valider votre commande</button>
+        
+        </div>
     </main>
 
     <footer>
