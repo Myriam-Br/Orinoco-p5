@@ -50,7 +50,7 @@ ul{
 }
 
 #navItems{
-    display: none;
+    visibility: hidden;
     background-color: rgba(0, 0, 0, 0.794);
     text-align: center;
     position: absolute;
@@ -196,11 +196,13 @@ select{
 #panier{
     width: 100%;
     margin-top: 50px;
+    margin-bottom: 40px;
 }
 #panier, th, td{
     border: solid black 1px;
     border-collapse: collapse;
     padding: 5px;
+
 }
 
 #btn-valider-commande{
@@ -208,7 +210,12 @@ select{
     height: 45px;
     background-color: rgb(187, 177, 218);
     font-size: 18px;
+}
 
+#total{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 40px;
 }
 
 

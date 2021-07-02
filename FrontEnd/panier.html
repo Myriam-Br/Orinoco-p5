@@ -13,7 +13,7 @@
     <header>
         <nav>
             <a href="index.html" class="logo"><img src="images/logoOrinoco.png" alt="logo"></a>
-            <button id="btn" class="btn" onclick="toggleNav()"><i class="fas fa-bars"></i></button>
+            <button id="btn-menu" class="btn" onclick="toggleNav()"><i class="fas fa-bars"></i></button>
             <ul id="navItems">
                 <li>Accueil</li>
                 <li>Panier<i class="fas fa-shopping-bag"></i></li>
@@ -30,20 +30,19 @@
                     <thead>
                     <tr>
                         <th>NOM</th>
-                        <th>COLOR</th>
+                        <th>COULEUR</th>
                         <th>PRICE</th>
                         <th>QUANTITE</th>
                     </tr>
                     </thead>
                     <tbody id="item-panier-container">
-                    </tbody>
-                    
+                    </tbody>      
                 </table>
             </div>
         
             <div id="total">
                 <p>Total de la commander:</p>
-                <span id="total-price">€</span>
+                <span id="total-price"></span>
             </div>
         
             <form id="formulaire-paiement">

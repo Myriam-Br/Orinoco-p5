@@ -1,3 +1,17 @@
+//-------------TOGGLE NAVIGATION-----------
+function toggleNav(){
+    var navigation = document.getElementById('navItems');
+
+    if(navigation.style.visibily='hidden'){
+        navigation.style.visibility= 'visible'
+    }  
+    else if(navigation.style.visibility= 'visible'){
+        navigation.style.visibility = 'hidden';
+    }  
+};
+
+
+//--------------------------PAGE ACCUEIL-----------------
 //récupération données API
 function getOursList(){
     fetch ('http://localhost:3000/api/teddies')
@@ -10,7 +24,6 @@ function getOursList(){
     }
 });
 };
-
 //squelette html page accueil
 function itemsList(ours){
     //affichage dynamique des produits sur la page d'accueil
@@ -55,22 +68,14 @@ console.log(item);
 };
 
 
-
+//----------------------PAGE PRODUIT------------------------//
 //récupération de la chaine de requette (querystring)
 var queryString = window.location.search;
 console.log(queryString);
-//methode 1
-//const leId = queryString.slice(4);
-
-//methode 2
 const urlSearchParams = new URLSearchParams(queryString);
 let idOurs = urlSearchParams.get('id');
 console.log(idOurs);
-
 //affichage du produit (de l'objet) qui a été sélectionné par l'id
-//-------------2 methodes possible--------
-
-//--- Methode 1: avec fetch et en mettant la valeur de l'id à la fin de l'url
 function getOursById(idOurs){
     fetch ('http://localhost:3000/api/teddies/'+idOurs)
 .then (res => res.json())
@@ -132,7 +137,6 @@ function itemById(ours){
 
         event.preventDefault();
 
-
         const selectorColorOption = document.getElementById('color');
         const colorSelected = selectorColorOption.value;
 
@@ -147,7 +151,6 @@ function itemById(ours){
 
          //-----gestion localStorage-----
         let produitsLocalStorage =JSON.parse(localStorage.getItem('produit'));
-        
   
         console.log('localSorage', produitsLocalStorage);
         console.log(Boolean(produitsLocalStorage));
@@ -173,7 +176,7 @@ function itemById(ours){
 
             // si localStorage pas vide   
             if(produitsLocalStorage){
-            console.log('ok');
+            console.log('produit ajouté au panier');
             addProductToCart();
             console.log('mes produits', produitsLocalStorage);
             popupConfirmation();
@@ -183,14 +186,19 @@ function itemById(ours){
             
             produitsLocalStorage=[];
             addProductToCart();
-            popupConfirmation();
-            };       
+            //popupConfirmation();
+            };   
+            
 console.log(itemAddedToBasket);
+
+        
+
     }, false); 
     
 };
 
 
+//---------------------PAGE PANIER----------------
 function addToCart(products){
     //pour la validation de la commande
     fetch("http://localhost:3000/api/teddies/order", {
@@ -235,9 +243,9 @@ if(produitsLocalStorage === null){
     <div class='container-panier-vide'>Le panier est vide</div>
     `;
     basketContainer.innerHTML = panierVide;
-} else{
 
-    //si le panier n'est pas vide :afficher élément localStorage
+} else{
+//si le panier n'est pas vide :afficher élément localStorage
     let produitsInBasket = [];
 
     console.log(produitsLocalStorage.length);
@@ -260,7 +268,7 @@ if(produitsLocalStorage === null){
         itemPanier.appendChild(itemName);
         itemName.setAttribute('class', 'item-name-panier')
         itemName.innerHTML = produitsLocalStorage[j].nomProduit;
-       
+        
         //-------color produit panier-----
         var itemColor = document.createElement('td');
         itemPanier.appendChild(itemColor);
@@ -277,19 +285,22 @@ if(produitsLocalStorage === null){
         itemPrice.appendChild(currency);
         currency.innerHTML = '€';
 
-       
-
         //-----creation div quantité----
         var itemQte= document.createElement('td');
         itemPanier.appendChild(itemQte);
         itemQte.setAttribute('class', 'item-quantity')
         itemQte.innerHTML = produitsLocalStorage[j].quantite;
-        
-        console.log(produitsInBasket);
-    }
+            
+            console.log(produitsInBasket);
+        }
 }  
 
+
 //------récupération info user------
+
+
+
+
 
 
 
@@ -299,13 +310,59 @@ if(produitsLocalStorage === null){
     console.log('ok je fonctionne');
     addToCart(tabIds);
 
+    console.log(window.location.pathname);
+
 }));
 
+
+//----------prix total du panier---------
+let totalPriceCalcul = [];
+
+//chercher prix dans panier
+for( let k=0; k < produitsLocalStorage.length; k++){
+    let prixProduitPanier = produitsLocalStorage[k].prix;
+
+    //mettre prix panier dans la variable 'totalPrice'.
+    totalPriceCalcul.push(prixProduitPanier);
+}
+
+//additioner les prix des produit du panier
+const reducer = (accumulator, currentValue ) => accumulator + currentValue;
+const totalPrice = totalPriceCalcul.reduce(reducer);
+
+//injecter le résultat dans le code html
+const totalCommande= document.getElementById('total-price');
+totalCommande.innerHTML = totalPrice + '€';
+//console.log(totalPrice);
+//console.log(totalPriceCalcul);
+
+
+//--------quantité total----------
+let totalQte = [];
+for (let l=0; l < produitsLocalStorage.length; l++){
+    console.log(produitsLocalStorage[l].idProduit);
+}
 
 }; console.log('myCart()');
 
 
-//-----redirection vers les différentes pages html du site-----
+
+//--------------PAGE CONFIRMATION COMMANDE-----------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//-------------REDIRECTION VERS LES DIFFERENTES PAGES DU SITE-----------//
 if (idOurs){
     getOursById(idOurs);
     console.log('produit')
