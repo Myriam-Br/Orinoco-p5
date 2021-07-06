@@ -117,8 +117,8 @@ function itemById(ours){
         }
         selectColor.innerHTML = structureOptions;
 
-
     console.log('colors', selectColor.value);
+
     //------creation div prix----
     var itemPrice= document.getElementById('item-price');
     itemPrice.innerHTML = ours.price/100 + '€';
@@ -163,7 +163,7 @@ function itemById(ours){
             }else{
                 //window.location.href  = 'index.html';
             }
-        }
+        };
 
         //fonction ajouter un produit sélectionné dans le localStorage 
         const addProductToCart= () =>{
@@ -191,17 +191,20 @@ function itemById(ours){
             
 console.log(itemAddedToBasket);
 
-        
-
     }, false); 
     
 };
 
 
 //---------------------PAGE PANIER----------------
+var queryStringPanier = window.location;
+console.log(queryStringPanier);
+
+
+
 function addToCart(products){
     //pour la validation de la commande
-    fetch("http://localhost:3000/api/teddies/order", {
+    fetch("http://localhost:3000/api/teddies/order",{
         method: 'POST',
         headers: { 
     'Accept': 'application/json', 
@@ -209,7 +212,7 @@ function addToCart(products){
     },
         body: JSON.stringify({
             contact:{
-                firstName : 'firstName',
+                firstName : 'firsName',
                 lastName: 'lastName',
                 address : 'address',
                 city: 'city',
@@ -221,10 +224,12 @@ function addToCart(products){
     .then (res=>res.json())
     .then (data=>{
         console.log('methodepost', data);
-         
+        console.log(data.contact.firstName); 
+
     })
 
 };
+
 //squelette html page panier
 function myCart(){
 //-------AFFICHAGE DES PRODUITS DU PANIER------
@@ -246,8 +251,8 @@ if(produitsLocalStorage === null){
 
 } else{
 //si le panier n'est pas vide :afficher élément localStorage
-    let produitsInBasket = [];
-
+   let produitsInBasket = [];
+   
     console.log(produitsLocalStorage.length);
 
     for (j=0; j < produitsLocalStorage.length; j++){
@@ -290,16 +295,9 @@ if(produitsLocalStorage === null){
         itemPanier.appendChild(itemQte);
         itemQte.setAttribute('class', 'item-quantity')
         itemQte.innerHTML = produitsLocalStorage[j].quantite;
-            
-            console.log(produitsInBasket);
+                
         }
 }  
-
-
-//------récupération info user------
-
-
-
 
 
 
@@ -310,9 +308,31 @@ if(produitsLocalStorage === null){
     console.log('ok je fonctionne');
     addToCart(tabIds);
 
-    console.log(window.location.pathname);
+
+
+    //------récupération info user------
+ //Déclaration des variables//
+
+ var userFirstName = document.getElementById('user-firstname');
+ console.log(userFirstName.value);
+ var userLastName = document.getElementById('user-lastname');
+ var userAddress = document.getElementById('user-address');
+ var userCity= document.getElementById('user-city');
+ var userEmail = document.getElementById('user-email');
+
+ //Récupération des valeurs du formulaire pour les mettre dans le local storage
+ localStorage.setItem('userfirstname',userFirstName.value );
+ localStorage.setItem('userlastname',userLastName.value);
+ localStorage.setItem('usercity',userAddress.value);
+ localStorage.setItem('useraddress',userCity.value);
+ localStorage.setItem('useremail', userEmail.value);
+    console.log(localStorage);
+
 
 }));
+
+
+console.log(window.location.pathname);
 
 
 //----------prix total du panier---------
@@ -344,6 +364,7 @@ for (let l=0; l < produitsLocalStorage.length; l++){
 }
 
 }; console.log('myCart()');
+
 
 
 
