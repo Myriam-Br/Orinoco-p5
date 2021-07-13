@@ -321,7 +321,7 @@ if (idOurs){
     getOursById(idOurs);
     console.log('produit')
 }
-else if(window.location.pathname === "/FrontEnd/panier.html" || window.location.pathname == "/panier.html" || window.location.pathname =="/projet5alt/FrontEnd/panier.html"){
+else if(window.location.pathname === "/FrontEnd/panier.html" || window.location.pathname == "/panier.html" || window.location.pathname =="/Orinoco-p5/FrontEnd/panier.html"){
     console.log('panier');
     myBasket();
 }
