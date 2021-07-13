@@ -14,9 +14,9 @@
             <a href="index.html" class="logo"><img src="images/logoOrinoco.png" alt="logo"></a>
             <button id="btn" class="btn" onclick="toggleNav()"><i class="fas fa-bars"></i></button>
             <ul id="navItems">
-                <li>Accueil</li>
-                <li>Panier<i class="fas fa-shopping-bag"></i></li>
-            </ul>
+                <li><a href="index.html">Accueil</a> </li>
+                <li><a href="panier.html">Panier<i class="fas fa-shopping-bag"></i></a></li>
+            </ul>    
             
         </nav>
     </header>
@@ -26,7 +26,18 @@
         <div id="confirmation-commande">
             <!--message de confirmation de la commande avec le nom de l'utilisateur, le prix total de la commande et l'identifiant de la commande-->
             <!--CODE JS A INJECTER ICI-->
+           <h1> <span id="user-first-name">UserFirstName</span> nous vous remerçions de votre commande d'un montant de <span id="total-price">totalPrice €</span></h1> 
+           <h2>Identifiant de votre commande: <span id="orderId">orderId</span></h2>
+           <div>
+               Résumé de votre commande
+               <table>
+                   
+               </table>
+           </div>
+
+     
         </div>
+        <a href="index.html" id="retour-accueil">> Revenir à la page d'accueil</a>
     </main>
 
     <footer>

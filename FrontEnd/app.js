@@ -1,215 +1,266 @@
 //-------------TOGGLE NAVIGATION-----------
 function toggleNav(){
     var navigation = document.getElementById('navItems');
+    navigation.style.visibily='hidden'
 
-    if(navigation.style.visibily='hidden'){
+    if(navigation.style.visibily){
         navigation.style.visibility= 'visible'
     }  
-    else if(navigation.style.visibility= 'visible'){
+    else {
         navigation.style.visibility = 'hidden';
     }  
 };
 
 
 //--------------------------PAGE ACCUEIL-----------------
-//récupération données API
+//-------PROMISE DE TYPE GET -> getOursList-------------
 function getOursList(){
-    fetch ('http://localhost:3000/api/teddies')
-.then (res => res.json())
-.then(data => {
-    console.log('myApi',data);
-    //console.log('image', data[1].imageUrl);
-    for (i=0; i< data.length; i++){
-        itemsList(data[i]);
-    }
-});
-};
-//squelette html page accueil
-function itemsList(ours){
-    //affichage dynamique des produits sur la page d'accueil
-var itemCard = document.createElement('a')
-const itemContainer = document.getElementById('item-container');
-itemContainer.appendChild(itemCard);
-itemCard.setAttribute('href', 'produit.html?id='+ours._id);
+    const promise1 = fetch('http://localhost:3000/api/teddies');
+    console.log(promise1);
+    promise1
+    .then(res => res.json())
+    .then(data =>{
+    console.log(data);
+    console.log(data.length);
+    console.log(data[1]._id);
+    
+        //put the content in a for... //
+    for(i=0; i<data.length; i++){
+        const cardContainer = document.getElementById('card-container');
+        var structureCard  = `
+        <div class="card">
+        <a href='produit.html?id=${data[i]._id}'>
+        <img src="${data[i].imageUrl}" alt="" class="image">
+        <div class="name">${data[i].name}</div>
+        <div class="price">${data[i].price/100} <span>€</span></div>
+        <div class="colors">${data[i].colors}</div>
+        <div class="description">${data[i].description}</div>
+        </a>
+        </div>
+        `;
+        cardContainer.insertAdjacentHTML("beforeend" ,structureCard); 
+        };
+    });
 
-var item = document.createElement('div');
-itemCard.appendChild(item);
-item.setAttribute('class' , 'item');
-
-//--------creation div image------
-var itemImage= document.createElement('img');
-item.appendChild(itemImage);
-itemImage.setAttribute('class', 'item-image');
-itemImage.setAttribute('src', ours.imageUrl);
-
-
-//-----creation div name-----
-var itemName= document.createElement('div');
-item.appendChild(itemName);
-itemName.setAttribute('class', 'item-name');
-itemName.innerHTML = ours.name;
-
-//------creation div prix----
-var itemPrice= document.createElement('div');
-item.appendChild(itemPrice);
-itemPrice.setAttribute('class', 'item-price');
-itemPrice.innerHTML = ours.price/100;
-//précision type de monnaie
-var currency = document.createElement('span');
-itemPrice.appendChild(currency);
-currency.innerHTML = '€'
-
-var itemDescription= document.createElement('div');
-item.appendChild(itemDescription);
-itemDescription.setAttribute('class', 'item-description');
-itemDescription.innerHTML = ours.description;
-
-console.log(item);
-};
+}
 
 
-//----------------------PAGE PRODUIT------------------------//
-//récupération de la chaine de requette (querystring)
+
+//----------PROMISE DE TYPE GET -> getOursById-------------
+
+//récupération de la chaine de requête (querystring)
 var queryString = window.location.search;
 console.log(queryString);
 const urlSearchParams = new URLSearchParams(queryString);
 let idOurs = urlSearchParams.get('id');
-console.log(idOurs);
+//console.log(idOurs);
+
 //affichage du produit (de l'objet) qui a été sélectionné par l'id
-function getOursById(idOurs){
-    fetch ('http://localhost:3000/api/teddies/'+idOurs)
-.then (res => res.json())
-.then(data => {
-    itemById(data);
-});
-}
-//squelette html page produit
-function itemById(ours){
-    //-----creation div carte item------
-    var itemCard = document.createElement('div')
-    const itemContainer = document.getElementById('item-container');
-    itemContainer.appendChild(itemCard);
-    itemCard.setAttribute('href', 'produit.html?id='+ours._id);
+
+//--- Methode 1: avec fetch et en mettant la valeur de l'id à la fin de l'url
+function getOursById(){
+    const promise2=  fetch ('http://localhost:3000/api/teddies/'+idOurs)
+    promise2
+        .then (res => res.json())
+        .then(data => {
+        const cardContainer = document.getElementById('card-container');
+        var structureCard  = `
+        <div class="card">
+        <img src="${data.imageUrl}" alt="" class="image">
+        <div class="name">${data.name}</div>
+        <div class="price">${data.price/100} <span>€</span></div>
+        <select class="colors">${data.colors}</select>
+        <div class="description">${data.description}</div>
+        <button type="submit" class="btn-add-to-basket">AJOUTER DANS PANIER</button>
+        </div>
+        `;
+        cardContainer.insertAdjacentHTML("beforeend" ,structureCard);
+        
+        const colorsSelector= document.querySelector('.colors');
+        var optionColor= data.colors;
+            let structureOptions =[];
+            console.log('democolor', optionColor);
+            for (let i = 0; i< optionColor.length; i++){
+                structureOptions = structureOptions + `
+                <option> ${optionColor[i]}</option>
+                `;
+            };
+            colorsSelector.innerHTML = structureOptions;
+            console.log(colorsSelector);
 
 
-    var item = document.getElementById('item');
-    itemCard.appendChild(item);
-    item.setAttribute('class' , 'item');
+        var btnSelect = document.querySelector('.btn-add-to-basket');
+        console.log('btn', btnSelect);
 
-    //--------creation div image------
-    var itemImage= document.getElementById('item-image');
-    itemImage.setAttribute('src', ours.imageUrl);
+        btnSelect.addEventListener('click', function(myCart){
+            myCart.preventDefault();
+            
+            var colorSelected = colorsSelector.value;
+            
+            var itemInStorage ={
+                idProduit:data._id,
+                name:data.name,
+                price:data.price/100,
+                colors:colorSelected,
+                quantite:0,
+            };  
+          
+            console.log(itemInStorage.idProduit);
+            console.log(typeof(itemInStorage.quantite));
 
-    //-----creation div name-----
-    var itemName= document.getElementById('item-name');
-    itemName.innerHTML = ours.name;
 
-    //------creation div couleur------
+            
+            //----------------STOCKAGE PRODUIT DU PANIER-------------
+             
+            var produitsLocalStorage =JSON.parse(localStorage.getItem('tableauItem'));
 
-    var selectColor = document.getElementById('color');
-    var optionColor= ours.colors;
-        let structureOptions =[];
-        console.log('democolor', optionColor);
-        for (let j = 0; j< optionColor.length; j++){
-            structureOptions = structureOptions + `
-            <option> ${optionColor[j]}</option>
-            `;
-        }
-        selectColor.innerHTML = structureOptions;
+            //produitsLocalStorage = []; 
+            //produitsLocalStorage.push(itemInStorage); 
+            //localStorage.setItem('tableauItem', JSON.stringify(produitsLocalStorage));     
+      
+           if (produitsLocalStorage) {  
+                //itemInStorage = produitsLocalStorage.find(x => x.idProduit === data._id);
+                //itemInStorage.quantite = itemInStorage.quantite+1;
+                produitsLocalStorage.push(itemInStorage); 
+                localStorage.setItem('tableauItem', JSON.stringify(produitsLocalStorage));     
+            } 
+            else{ 
+                produitsLocalStorage = []; 
+                produitsLocalStorage.push(itemInStorage); 
+                localStorage.setItem('tableauItem', JSON.stringify(produitsLocalStorage));     
+            }
 
-    console.log('colors', selectColor.value);
-
-    //------creation div prix----
-    var itemPrice= document.getElementById('item-price');
-    itemPrice.innerHTML = ours.price/100 + '€';
-
-    //---------creation div description-------
-    var itemDescription= document.getElementById('item-description');
-    itemDescription.innerHTML = ours.description;
-
-    //-------creation boutton commander------
-    var btnCommander = document.getElementById('btn-commander');
-    console.log(btnCommander);
-
-   
-    //----écouter le boutton et envoyer le panier-----
-    btnCommander.addEventListener('click', function(event){
-
-        event.preventDefault();
-
-        const selectorColorOption = document.getElementById('color');
-        const colorSelected = selectorColorOption.value;
-
-         //-----récupération des valeurs du formulaire---
-         var itemAddedToBasket = {
-            nomProduit: ours.name,
-            idProduit: ours._id,
-            couleurProduit: colorSelected,
-            quantite:1,
-            prix: ours.price/100,
-            };   
-
-         //-----gestion localStorage-----
-        let produitsLocalStorage =JSON.parse(localStorage.getItem('produit'));
+            console.log('mesProduits', produitsLocalStorage.itemInStorage);
+            console.log("monProduit",itemInStorage);
+            console.log("monProduitqte",itemInStorage.quantite+1);
+        });
   
-        console.log('localSorage', produitsLocalStorage);
-        console.log(Boolean(produitsLocalStorage));
 
-        //fonction popupConfirmation
-        const popupConfirmation = ()=>{
-            if(window.confirm (`${ours.name} a bien été ajouté au panier
-            Consulter le panier OK ou revenir à l'accueil ANNULER`)){
-                window.location.href = "panier.html";
-            }else{
-                //window.location.href  = 'index.html';
-            }
-        };
+    });
+};
 
-        //fonction ajouter un produit sélectionné dans le localStorage 
-        const addProductToCart= () =>{
-            //ajout dans le tableau objet choisi pas utilisateur
-            produitsLocalStorage.push(itemAddedToBasket);
+//console.log(localStorage.setItem('produit', 'my variable'));
+console.log(localStorage);
+//console.log(localStorage.getItem('tableauItem'));
+console.log(JSON.parse(localStorage.getItem('tableauItem')));
 
-            //transformation en format json et envoie dans 'produit' du localStorage
-            localStorage.setItem('produit', JSON.stringify(produitsLocalStorage));
-        }
 
-            // si localStorage pas vide   
-            if(produitsLocalStorage){
-            console.log('produit ajouté au panier');
-            addProductToCart();
-            console.log('mes produits', produitsLocalStorage);
-            popupConfirmation();
-            }
-            // si localSorage vide
-            else{
-            
-            produitsLocalStorage=[];
-            addProductToCart();
-            //popupConfirmation();
-            };   
-            
-console.log(itemAddedToBasket);
 
-    }, false); 
+    //-------------CREATION DU PANIER--------------
+function myBasket(){
+  
+    var produitsLocalStorage =JSON.parse(localStorage.getItem('tableauItem'));
+    //console.log('myBasket',produitsLocalStorage);
+    console.log(produitsLocalStorage.length);
     
+    var idItemInBasket = [];
+    var totalPriceTable=[];
+
+    if(produitsLocalStorage == null){
+        console.log('panier est vide');   
+    } else{
+        
+        //let productsInBasket = [];
+        //productsInBasket.push(produitsLocalStorage);
+        
+        console.log('id produitInBasket',idItemInBasket);
+        console.log('mybasket',produitsLocalStorage);
+        for(j=0; j < produitsLocalStorage.length; j++){
+            //---------------AJOUT ID PRODUIT DANS TABLEAU ID--------------
+            idItemInBasket.push(produitsLocalStorage[j].idProduit);
+            console.log(produitsLocalStorage[j].idProduit);
+
+            //-------------REMPLACER PRODUIT DU LOCALSTORAGE DANS LE HTML DU PANIER ------------
+            const itemBasket = document.getElementById('tbody');
+            var structurePanier = `
+            <tr class="tbody-item">
+            <td>${produitsLocalStorage[j].name}</td>
+            <td>${produitsLocalStorage[j].colors}</td>
+            <td>${produitsLocalStorage[j].quantite}</td>
+            <td>${produitsLocalStorage[j].price+"€"}</td>
+            </tr> 
+            `;
+            itemBasket.insertAdjacentHTML('beforeend', structurePanier); 
+            
+
+            //-----------CALCUL DU PRIX TOTAL-------------------
+            totalPriceTable.push(produitsLocalStorage[j].price);
+            const reducer = (accumulator, currentValue ) => accumulator + currentValue;
+            console.log(reducer);
+    
+            const totalPrice = totalPriceTable.reduce(reducer);
+            console.log(totalPrice);
+        
+            var totalPriceAmount = document.getElementById('total-price-amount');
+            console.log(totalPriceAmount);
+            totalPriceAmount.innerHTML = totalPrice + '€';
+        }
+    };
+    //----------------ENVOIE DONNEE USER FORM VERS LOCAL STORAGE------------------
+    
+    var btnValider = document.getElementById('btn-valider');
+    console.log('mybtn', btnValider);
+
+    //------------écouter événement et lancer fontion valider--------
+    btnValider.addEventListener('click', function(event){
+        event.preventDefault();
+        dataUser();
+
+    var queryString = window.location.pathname;
+    console.log(queryString);
+
+    });
+
 };
 
 
-//---------------------PAGE PANIER----------------
-var queryStringPanier = window.location;
-console.log(queryStringPanier);
+//----------------- STOCKAGE DATA USERS--------------
+
+function dataUser(){
+    var userLocalStorage = JSON.parse(localStorage.getItem('dataUsers'));
+   
+    var userFirstName = document.getElementById('user-first-name');
+    userFirstName = userFirstName.value;
+
+    var userLastName = document.getElementById('user-last-name');
+    userLastName = userLastName.value;
+
+    var  userAddress= document.getElementById('user-adress');
+    userAddress = userAddress.value;
+
+    var userCity = document.getElementById('user-city');
+    userCity = userCity.value;
+
+    var userEmail = document.getElementById('user-email');
+    userEmail = userEmail.value;
+   
+    var contactUser ={
+       firstName: userFirstName,
+       lastName: userLastName,
+       address: userAddress,
+       city: userCity,
+       email: userEmail,
+   };
+
+   if(userLocalStorage){
+    userLocalStorage.push(contactUser);
+    localStorage.setItem('dataUsers', JSON.stringify(userLocalStorage));
+   } 
+   else{
+    userLocalStorage = [];
+    userLocalStorage.push(contactUser);
+    localStorage.setItem('dataUsers', JSON.stringify(userLocalStorage));
+   };
+};
 
 
 
-function addToCart(products){
-    //pour la validation de la commande
-    fetch("http://localhost:3000/api/teddies/order",{
+    const promise3 =  fetch("http://localhost:3000/api/teddies/order",{
         method: 'POST',
         headers: { 
-    'Accept': 'application/json', 
-    'Content-Type': 'application/json' 
-    },
+        'Accept': 'application/json', 
+        'Content-Type': 'application/json' 
+        },
         body: JSON.stringify({
             contact:{
                 firstName : 'firsName',
@@ -218,124 +269,70 @@ function addToCart(products){
                 city: 'city',
                 email:'email'
             },
-            products:products,   
+            products:[],   
         })   
-    })
+    });
+
+    promise3
     .then (res=>res.json())
     .then (data=>{
         console.log('methodepost', data);
         console.log(data.contact.firstName); 
+        console.log(JSON.parse(localStorage.getItem('tableauItem')));
+        console.log(data.orderId);
+       
+        //---------recupérer idProduit localStorage dans POST----------
+        var produitsLocalStorage = JSON.parse(localStorage.getItem('tableauItem'));
+        console.log(produitsLocalStorage[1].idProduit);
+        var idItemInBasket = [];
+        for(j=0; j < produitsLocalStorage.length; j++){
+            idItemInBasket.push(produitsLocalStorage[j].idProduit);
+        };
+        console.log(idItemInBasket);
+        data.products = idItemInBasket;
 
-    })
 
+
+        //-----------récupérer usersData localStorage dans POST-------------
+        console.log(JSON.parse(localStorage.getItem('dataUsers')));
+        var userLocalStorage = JSON.parse(localStorage.getItem('dataUsers'));
+    
+        data.contact.firstName = userLocalStorage.firstName;
+        data.contact.lastName = userLocalStorage.lastName;
+        data.contact.address = userLocalStorage.address;
+        data.contact.city = userLocalStorage.city;
+        data.contact.email = userLocalStorage.email;
+
+    });
+    
+     //--------------structure page de commande-------------
+function validationCommande(){
+     //console.log(JSON.parse(localStorage.getItem('dataUsers')));
+     var userData = JSON.parse(localStorage.getItem('dataUsers'));
+     console.log(userData[0].firstName);
+     var firstNameField = document.getElementById('firstName');
+     firstNameField.innerHTML = userData.firstName;
+     console.log(firstNameField);
 };
 
-//squelette html page panier
-function myCart(){
-//-------AFFICHAGE DES PRODUITS DU PANIER------
-//--- récupération valeur du localStorage-----
-let produitsLocalStorage =JSON.parse(localStorage.getItem('produit'));
-var tabIds =[];
-console.log(tabIds);
-console.log('productinlocalstorage' ,produitsLocalStorage);
 
-//selection de la classe qui contiendra le panier
-const basketContainer = document.getElementById('panier');
+//-------------REDIRECTION VERS LES DIFFERENTES PAGES DU SITE-----------//
+if (idOurs){
+    getOursById(idOurs);
+    console.log('produit')
+}
+else if(window.location.pathname === "/FrontEnd/panier.html" || window.location.pathname == "/panier.html" || window.location.pathname =="/projet5alt/FrontEnd/panier.html"){
+    console.log('panier');
+    myBasket();
+}
 
-//si le panier est vide: afficner le panier et vide
-if(produitsLocalStorage === null){
-    const panierVide = `
-    <div class='container-panier-vide'>Le panier est vide</div>
-    `;
-    basketContainer.innerHTML = panierVide;
-
-} else{
-//si le panier n'est pas vide :afficher élément localStorage
-   let produitsInBasket = [];
-   
-    console.log(produitsLocalStorage.length);
-
-    for (j=0; j < produitsLocalStorage.length; j++){
-
-        tabIds.push(produitsLocalStorage[j].idProduit);
-        produitsInBasket = produitsInBasket + ``;
-
-        //--------creation div image------
-        var itemImage= document.querySelector('img');
-        var itemPanierContainer = document.getElementById('item-panier-container')
-
-        var itemPanier= document.createElement('tr');
-        itemPanierContainer.appendChild(itemPanier);
-        itemPanier.setAttribute('class', 'item-panier')
-
-        //-----creation div name-----
-        var itemName= document.createElement('td');
-        itemPanier.appendChild(itemName);
-        itemName.setAttribute('class', 'item-name-panier')
-        itemName.innerHTML = produitsLocalStorage[j].nomProduit;
-        
-        //-------color produit panier-----
-        var itemColor = document.createElement('td');
-        itemPanier.appendChild(itemColor);
-        itemColor.setAttribute('class', 'item-color-panier')
-        itemColor.innerHTML = produitsLocalStorage[j].couleurProduit;
-
-        //------creation div prix----
-        var itemPrice= document.createElement('td');
-        itemPanier.appendChild(itemPrice);
-        itemPrice.setAttribute('class', 'item-price-panier')
-        itemPrice.innerHTML = produitsLocalStorage[j].prix;
-        //précision type de monnaie
-        var currency = document.createElement('span');
-        itemPrice.appendChild(currency);
-        currency.innerHTML = '€';
-
-        //-----creation div quantité----
-        var itemQte= document.createElement('td');
-        itemPanier.appendChild(itemQte);
-        itemQte.setAttribute('class', 'item-quantity')
-        itemQte.innerHTML = produitsLocalStorage[j].quantite;
-                
-        }
-}  
+else{
+    console.log('index');
+    getOursList();
+};
 
 
-
-
-//-------gestion boutton passer la commande-----
-    var btnValiderCommande = document.getElementById('btn-valider-commande');
-    btnValiderCommande.addEventListener('click', (event =>{
-    console.log('ok je fonctionne');
-    addToCart(tabIds);
-
-
-
-    //------récupération info user------
- //Déclaration des variables//
-
- var userFirstName = document.getElementById('user-firstname');
- console.log(userFirstName.value);
- var userLastName = document.getElementById('user-lastname');
- var userAddress = document.getElementById('user-address');
- var userCity= document.getElementById('user-city');
- var userEmail = document.getElementById('user-email');
-
- //Récupération des valeurs du formulaire pour les mettre dans le local storage
- localStorage.setItem('userfirstname',userFirstName.value );
- localStorage.setItem('userlastname',userLastName.value);
- localStorage.setItem('usercity',userAddress.value);
- localStorage.setItem('useraddress',userCity.value);
- localStorage.setItem('useremail', userEmail.value);
-    console.log(localStorage);
-
-
-}));
-
-
-console.log(window.location.pathname);
-
-
-//----------prix total du panier---------
+/*//----------prix total du panier---------
 let totalPriceCalcul = [];
 
 //chercher prix dans panier
@@ -356,46 +353,4 @@ totalCommande.innerHTML = totalPrice + '€';
 //console.log(totalPrice);
 //console.log(totalPriceCalcul);
 
-
-//--------quantité total----------
-let totalQte = [];
-for (let l=0; l < produitsLocalStorage.length; l++){
-    console.log(produitsLocalStorage[l].idProduit);
-}
-
-}; console.log('myCart()');
-
-
-
-
-//--------------PAGE CONFIRMATION COMMANDE-----------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//-------------REDIRECTION VERS LES DIFFERENTES PAGES DU SITE-----------//
-if (idOurs){
-    getOursById(idOurs);
-    console.log('produit')
-}
-else if(window.location.pathname === "/FrontEnd/panier.html" || window.location.pathname == "/panier.html" || window.location.pathname =="/projet5alt/FrontEnd/panier.html"){
-    console.log('panier');
-    myCart(); 
-}
-
-else{
-    console.log('index');
-    getOursList();
-};
-
-
+*/

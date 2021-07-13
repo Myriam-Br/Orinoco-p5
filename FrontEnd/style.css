@@ -56,11 +56,17 @@ ul{
     position: absolute;
 }
 
-#navItems  li{
-    border-bottom: solid 2px black;
+#navItems a {
+    
     color: whitesmoke;
     padding: 5px;
     font-size: 18px;
+}
+
+#navItems li{
+    border-bottom: solid 2px black;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 #basket{
     font-size: 20px;
@@ -96,91 +102,65 @@ main{
 
 h1{
     font-size: 30px;
-    font-weight: 500px;
+    font-weight: 500;
     text-align: center;
 }
 /*style page accueil/index*/
-.item{
-    text-decoration: none;
-    height: fit-content;
+#items-list h1{
+font-size: 25px;
+margin-bottom: 20px;
+font-weight: 500;
+}
+
+#card-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.card{
     width: 100%;
-    background-color: rgb(187, 177, 218);
-    margin-bottom: 20px;
-    margin-top: 30px;
-    border: black solid 2px;
-    position: relative;
-}
-
-.item-price{
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
-.item-image{
-    width: 100%; 
-    height: 100%;  
-    object-fit: cover;
-}
-
-.item-name{
-    font-weight: bold;
-    margin-bottom:15px;
-}
-
-.item-description{
-    margin-bottom: 15px;
-    margin-top: 15px;
-}
-
-/*style page produit*/
-#item{
-    text-decoration: none;
     height: fit-content;
-    width: 100%;
-    background-color: rgb(187, 177, 218);
-    margin-bottom: 20px;
-    margin-top: 35px;
-    border: black solid 2px;
-    position: relative;
-    padding: 5px;
-}
+    margin-bottom: 50px;
+    border: grey solid 2px;
+    border-radius: 10px;
+    padding-bottom: 10px;
 
-#item-price{
-    position: absolute;
-    bottom: 0;
-    right: 0;
+}
+.image{
+width: 100%;
+height: 75%;
+object-fit: cover;
+border-top-left-radius: 8px;
+border-top-right-radius: 8px;
+}
+.name, .price, .colors, .description{
+margin:4px 10px;
+
+}
+.colors{
+font-weight: 500;
+}
+.name{
     font-weight: bold;
-    margin-bottom: 5px;
+    font-size: 20px;
 }
 
-#item-image{
-    width: 100%; 
-    height: 100%;  
-    object-fit: cover;
-}
-
-#item-name{
-    font-weight: bold;
-    margin-bottom:15px;
-}
-
-#item-description{
-    margin-bottom: 45px;
-    margin-top: 15px;
-}
-#btn-commander{
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 130px;
-    height: 35px;
+.price{
+    float: right;
     font-size: 18px;
-    background-color: aliceblue;
-    margin-bottom: 5px;
-    margin-left: 5px;
+    font-weight: 500;
+}
+
+.description{
+    font-size: 16px;
+}
+
+/*style page produit btn-add-panier*/
+
+#product-container h1{
+    font-size: 28px;
+    margin-bottom: 20px;
+    font-weight: 500;
 }
 
 select{
@@ -188,40 +168,86 @@ select{
     width: 95%;
     height: 30px;
     margin: 5px;
+    font-size: 16px;
+}
+
+
+
+.btn-add-to-basket{
+    width: 95%;
+    height: 35px;
+    font-weight: bold;
+    font-size: 15px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    color: rgb(28, 29, 51);
+    box-shadow: 0px 2px 8px 2px rgb(177, 170, 170);  
+    border-radius: 8px;
+    background-image: linear-gradient(190deg,#ffc0cb, #d1c6eb);
 }
 
 
 /*style page panier*/
 
-#panier{
-    width: 100%;
-    margin-top: 50px;
-    margin-bottom: 40px;
-}
-#panier, th, td{
-    border: solid black 1px;
+
+table{
+    border: black solid 2px;
     border-collapse: collapse;
-    padding: 5px;
-
-}
-
-#btn-valider-commande{
-    width: fit-content;
-    height: 45px;
-    background-color: rgb(187, 177, 218);
-    font-size: 18px;
-}
-
-#total{
-    display: flex;
-    justify-content: space-between;
     margin-bottom: 40px;
 }
 
+#thead th{
+    border: black solid 2px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-weight: 500;
+}
+
+.tbody-item td{
+    border: black solid 2px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    text-align: center;  
+}
+
+#total-price{
+    border: black solid 2px;
+}
+#total-price th{
+    border: black solid 2px;
+}
+
+#total-price td{
+    text-align: center;
+}
+
+#form-container {
+    padding-bottom: 80px;
+}
+
+#form-container h2{
+font-size: 18px;
+margin-bottom: 10px;
+}
+form input{
+    padding: 10px;
+    width: 95%;
+}
+
+#btn-valider{
+width: 95%;
+height: 35px;
+font-weight: bold;
+font-size: 15px;
+font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+color: rgb(28, 29, 51);
+box-shadow: 0px 2px 8px 2px rgb(177, 170, 170);  
+border-radius: 8px;
+background-image: linear-gradient(190deg,#ffc0cb, #d1c6eb);
+align-self: center;
+}
 
 /*footer*/
 footer{
-margin-top: 90px;
 background-color: #f3e9f1;
 padding: 10px;
 }

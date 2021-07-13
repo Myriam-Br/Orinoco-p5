@@ -15,56 +15,63 @@
             <a href="index.html" class="logo"><img src="images/logoOrinoco.png" alt="logo"></a>
             <button id="btn-menu" class="btn" onclick="toggleNav()"><i class="fas fa-bars"></i></button>
             <ul id="navItems">
-                <li>Accueil</li>
-                <li>Panier<i class="fas fa-shopping-bag"></i></li>
-            </ul>
+                <li><a href="index.html">Accueil</a> </li>
+                <li><a href="panier.html">Panier<i class="fas fa-shopping-bag"></i></a></li>
+            </ul>    
         </nav>
     </header>
       
     <main>
-        <div id="mon-panier">
+        <div id="card-container">
             <h1>Votre panier</h1>
-        
-            <div>
-                <table id="panier">
-                    <thead>
+            <table>
+                <thead id="thead">
                     <tr>
-                        <th>NOM</th>
+                        <th>PRODUIT</th>
                         <th>COULEUR</th>
-                        <th>PRICE</th>
                         <th>QUANTITE</th>
+                        <th>PRIX</th>
                     </tr>
-                    </thead>
-                    <tbody id="item-panier-container">
-                    </tbody>      
-                </table>
-            </div>
+                </thead>
+                <tbody id="tbody">      
+                </tbody>
+            </table>
+            <table id="total-price">
+                <tr>
+                    <th>Montant de la commande</th>   
+                </tr>
+                <tr>
+                    <td id="total-price-amount">montant</td>
+                </tr>
+                
+                
+            </table>
+        </div>   
         
-            <div id="total">
-                <p>Total de la commander:</p>
-                <span id="total-price"></span>
-            </div>
-        
-            <form id="formulaire-paiement">
-                <label for="user-firstname">Nom</label>
-                <input type="text" name="user-firstname" id="user-firstname"><br>
-        
-                <label for="user-lastname">Prenom</label>
-                <input type="text" name="user-lastname" id="user-lastname"><br>
-        
-                <label for="user-address">Adresse</label>
-                <input type="text" name="user-address" id="user-address"><br>
-        
-                <label for="user-city">Ville</label>
-                <input type="text" name="user-city" id="user-city"><br>
-        
-                <label for="user-email">E-mail</label>
-                <input type="text" name="user-email" id="user-email"><br>
+        <div id="form-container">
+            <h2>Veuillez renseigner le formulaire pour finaliser votre commande</h2>
+
+            <form>
+                <label for="user-first-name">Firstname</label>
+                <input type="text" id="user-first-name"><br>
+          
+                <label for="user-last-name">Lastname</label>
+                <input type="text" id="user-last-name"><br>
+          
+                <label for="user-adress">Address</label>
+                <input type="text" id="user-adress"><br>
+          
+                <label for="user-city">City</label>
+                <input type="text" id="user-city"><br>
+          
+                <label for="user-email">Email</label>
+                <input type="text" id="user-email"><br>
             </form>
-        
-            <button type="submit" id="btn-valider-commande">Valider votre commande</button>
-        
+            
+            <button type="submit" id="btn-valider" >Valider</button>
         </div>
+        
+   
     </main>
 
     <footer>
