@@ -151,7 +151,7 @@ function myBasket(){
   
     var produitsLocalStorage =JSON.parse(localStorage.getItem('tableauItem'));
     //console.log('myBasket',produitsLocalStorage);
-    console.log(produitsLocalStorage.length);
+   // console.log(produitsLocalStorage.length);
     
     var idItemInBasket = [];
     var totalPriceTable=[];
@@ -197,6 +197,8 @@ function myBasket(){
             console.log(totalPriceAmount);
             totalPriceAmount.innerHTML = totalPrice + '€';
         }   
+        
+        console.log(produitsLocalStorage.length);
     };
 
 
