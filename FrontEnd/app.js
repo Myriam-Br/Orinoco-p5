@@ -1,15 +1,19 @@
 //-------------TOGGLE NAVIGATION-----------
-function toggleNav(){
-    var navigation = document.getElementById('navItems');
-    navigation.style.visibily='hidden'
 
-    if(navigation.style.visibily){
-        navigation.style.visibility= 'visible'
-    }  
-    else {
-        navigation.style.visibility = 'hidden';
-    }  
-};
+   /* var navigation = document.getElementById('navItems');
+    var btnMenu = document.getElementById('btn');
+    navigation.style.display = 'none'
+    btnMenu.addEventListener('click', function(e){
+        e.preventDefault();
+        
+        if(navigation.style.display = 'none'){
+            navigation.style.display= 'block'
+        }  
+        else{
+            navigation.style.display = 'none';
+        }  
+    });*/
+
 
 
 //--------------------------PAGE ACCUEIL-----------------
@@ -108,34 +112,30 @@ function getOursById(){
             console.log(itemInStorage.idProduit);
             console.log(typeof(itemInStorage.quantite));
 
-
-            
             //----------------STOCKAGE PRODUIT DU PANIER-------------
              
             var produitsLocalStorage =JSON.parse(localStorage.getItem('tableauItem'));
 
             //produitsLocalStorage = []; 
             //produitsLocalStorage.push(itemInStorage); 
-            //localStorage.setItem('tableauItem', JSON.stringify(produitsLocalStorage));     
+           // localStorage.setItem('tableauItem', JSON.stringify(produitsLocalStorage));     
       
-           if (produitsLocalStorage) {  
-                //itemInStorage = produitsLocalStorage.find(x => x.idProduit === data._id);
-                //itemInStorage.quantite = itemInStorage.quantite+1;
-                produitsLocalStorage.push(itemInStorage); 
-                localStorage.setItem('tableauItem', JSON.stringify(produitsLocalStorage));     
-            } 
-            else{ 
-                produitsLocalStorage = []; 
-                produitsLocalStorage.push(itemInStorage); 
-                localStorage.setItem('tableauItem', JSON.stringify(produitsLocalStorage));     
+           if (produitsLocalStorage==undefined) {  
+                produitsLocalStorage = [];     
+            } else{ 
+                itemInStorage = produitsLocalStorage.find(x => x.idProduit === data._id); 
+                itemInStorage.quantite = itemInStorage.quantite+1;                
+                console.log(itemInStorage.quantite = itemInStorage.quantite+1); 
             }
 
-            console.log('mesProduits', produitsLocalStorage.itemInStorage);
-            console.log("monProduit",itemInStorage);
-            console.log("monProduitqte",itemInStorage.quantite+1);
+            produitsLocalStorage.push(itemInStorage); 
+            localStorage.setItem('tableauItem', JSON.stringify(produitsLocalStorage));    
+
+
+            console.log('mesProduits', produitsLocalStorage);
+            console.log("monProduit",itemInStorage.quantite);
         });
   
-
     });
 };
 
@@ -156,9 +156,11 @@ function myBasket(){
     var idItemInBasket = [];
     var totalPriceTable=[];
 
-    if(produitsLocalStorage == null){
+    if(produitsLocalStorage === null){
+
         console.log('panier est vide');   
-    } else{
+    } 
+    else{
         
         //let productsInBasket = [];
         //productsInBasket.push(produitsLocalStorage);
@@ -189,12 +191,12 @@ function myBasket(){
             console.log(reducer);
     
             const totalPrice = totalPriceTable.reduce(reducer);
-            console.log(totalPrice);
+            console.log("prix total", totalPrice);
         
             var totalPriceAmount = document.getElementById('total-price-amount');
             console.log(totalPriceAmount);
             totalPriceAmount.innerHTML = totalPrice + '€';
-        }
+        }   
     };
     //----------------ENVOIE DONNEE USER FORM VERS LOCAL STORAGE------------------
     
@@ -205,9 +207,8 @@ function myBasket(){
     btnValider.addEventListener('click', function(event){
         event.preventDefault();
         dataUser();
-
-    var queryString = window.location.pathname;
-    console.log(queryString);
+        var queryString = window.location.pathname;
+        console.log(queryString);
 
     });
 
@@ -254,7 +255,6 @@ function dataUser(){
 };
 
 
-
     const promise3 =  fetch("http://localhost:3000/api/teddies/order",{
         method: 'POST',
         headers: { 
@@ -283,16 +283,22 @@ function dataUser(){
        
         //---------recupérer idProduit localStorage dans POST----------
         var produitsLocalStorage = JSON.parse(localStorage.getItem('tableauItem'));
-        console.log(produitsLocalStorage[1].idProduit);
+        //console.log(produitsLocalStorage[1].idProduit);
         var idItemInBasket = [];
-        for(j=0; j < produitsLocalStorage.length; j++){
-            idItemInBasket.push(produitsLocalStorage[j].idProduit);
-        };
+        if(produitsLocalStorage==null){
+            produitsLocalStorage=[];
+
+        }else{
+            for(j=0; j < produitsLocalStorage.length; j++){
+                idItemInBasket.push(produitsLocalStorage[j].idProduit);
+            };
+        }
+
         console.log(idItemInBasket);
         data.products = idItemInBasket;
 
 
-
+        
         //-----------récupérer usersData localStorage dans POST-------------
         console.log(JSON.parse(localStorage.getItem('dataUsers')));
         var userLocalStorage = JSON.parse(localStorage.getItem('dataUsers'));
@@ -302,17 +308,22 @@ function dataUser(){
         data.contact.address = userLocalStorage.address;
         data.contact.city = userLocalStorage.city;
         data.contact.email = userLocalStorage.email;
+  
+                
+  });
 
-    });
+
+
+  
     
      //--------------structure page de commande-------------
 function validationCommande(){
-     //console.log(JSON.parse(localStorage.getItem('dataUsers')));
-     var userData = JSON.parse(localStorage.getItem('dataUsers'));
-     console.log(userData[0].firstName);
-     var firstNameField = document.getElementById('firstName');
-     firstNameField.innerHTML = userData.firstName;
-     console.log(firstNameField);
+    //console.log(JSON.parse(localStorage.getItem('dataUsers')));
+    var userData = JSON.parse(localStorage.getItem('dataUsers'));
+    console.log(userData[0].firstName);
+    var firstNameField = document.getElementById('user-first-name');
+    firstNameField.innerHTML = userData.firstName;
+    console.log(firstNameField);
 };
 
 
@@ -324,6 +335,7 @@ if (idOurs){
 else if(window.location.pathname === "/FrontEnd/panier.html" || window.location.pathname == "/panier.html" || window.location.pathname =="/Orinoco-p5/FrontEnd/panier.html"){
     console.log('panier');
     myBasket();
+    dataUser();
 }
 
 else{
@@ -332,9 +344,11 @@ else{
 };
 
 
+
+
+
 /*//----------prix total du panier---------
 let totalPriceCalcul = [];
-
 //chercher prix dans panier
 for( let k=0; k < produitsLocalStorage.length; k++){
     let prixProduitPanier = produitsLocalStorage[k].prix;
@@ -352,5 +366,4 @@ const totalCommande= document.getElementById('total-price');
 totalCommande.innerHTML = totalPrice + '€';
 //console.log(totalPrice);
 //console.log(totalPriceCalcul);
-
 */
