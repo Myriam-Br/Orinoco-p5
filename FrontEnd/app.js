@@ -198,25 +198,9 @@ function myBasket(){
             totalPriceAmount.innerHTML = totalPrice + '€';
         }   
     };
-    //----------------ENVOIE DONNEE USER FORM VERS LOCAL STORAGE------------------
-    
-    var btnValider = document.getElementById('btn-valider');
-    console.log('mybtn', btnValider);
-
-    //------------écouter événement et lancer fontion valider--------
-    btnValider.addEventListener('click', function(event){
-        event.preventDefault();
-        dataUser();
-        var queryString = window.location.pathname;
-        console.log(queryString);
-
-    });
-
-};
 
 
 //----------------- STOCKAGE DATA USERS--------------
-
 function dataUser(){
     var userLocalStorage = JSON.parse(localStorage.getItem('dataUsers'));
    
@@ -255,6 +239,10 @@ function dataUser(){
 };
 
 
+
+};
+
+
     const promise3 =  fetch("http://localhost:3000/api/teddies/order",{
         method: 'POST',
         headers: { 
@@ -285,9 +273,10 @@ function dataUser(){
         var produitsLocalStorage = JSON.parse(localStorage.getItem('tableauItem'));
         //console.log(produitsLocalStorage[1].idProduit);
         var idItemInBasket = [];
+
         if(produitsLocalStorage==null){
             produitsLocalStorage=[];
-
+            
         }else{
             for(j=0; j < produitsLocalStorage.length; j++){
                 idItemInBasket.push(produitsLocalStorage[j].idProduit);
@@ -297,9 +286,10 @@ function dataUser(){
         console.log(idItemInBasket);
         data.products = idItemInBasket;
 
-
-        
-        //-----------récupérer usersData localStorage dans POST-------------
+        if(userLocalStorage==null){
+            localStorage.setItem('dataUsers', JSON.stringify(userLocalStorage));
+        } else{
+              //-----------récupérer usersData localStorage dans POST-------------
         console.log(JSON.parse(localStorage.getItem('dataUsers')));
         var userLocalStorage = JSON.parse(localStorage.getItem('dataUsers'));
     
@@ -308,8 +298,9 @@ function dataUser(){
         data.contact.address = userLocalStorage.address;
         data.contact.city = userLocalStorage.city;
         data.contact.email = userLocalStorage.email;
-  
-                
+
+        }
+ 
   });
 
 
@@ -335,7 +326,21 @@ if (idOurs){
 else if(window.location.pathname === "/FrontEnd/panier.html" || window.location.pathname == "/panier.html" || window.location.pathname =="/Orinoco-p5/FrontEnd/panier.html"){
     console.log('panier');
     myBasket();
-    dataUser();
+
+    //----------------ENVOIE DONNEE USER FORM VERS LOCAL STORAGE------------------
+
+    var btnValider = document.getElementById('btn-valider');
+    console.log('mybtn', btnValider);
+    //------------écouter événement et lancer fontion valider--------
+    btnValider.addEventListener('click', function(event){
+        event.preventDefault();
+        dataUser();
+        validationCommande();
+        var queryString = window.location.pathname;
+        console.log(queryString);
+
+    });
+    
 }
 
 else{
