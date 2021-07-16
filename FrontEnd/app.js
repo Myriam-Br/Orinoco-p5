@@ -122,15 +122,14 @@ function getOursById(){
       
            if (produitsLocalStorage==undefined) {  
                 produitsLocalStorage = [];     
-            } else{ 
+            }else{ 
                 itemInStorage = produitsLocalStorage.find(x => x.idProduit === data._id); 
                 itemInStorage.quantite = itemInStorage.quantite+1;                
-                console.log(itemInStorage.quantite = itemInStorage.quantite+1); 
+                //console.log(itemInStorage.quantite = itemInStorage.quantite+1); 
             }
 
             produitsLocalStorage.push(itemInStorage); 
             localStorage.setItem('tableauItem', JSON.stringify(produitsLocalStorage));    
-
 
             console.log('mesProduits', produitsLocalStorage);
             console.log("monProduit",itemInStorage.quantite);
@@ -146,7 +145,7 @@ console.log(JSON.parse(localStorage.getItem('tableauItem')));
 
 
 
-    //-------------CREATION DU PANIER--------------
+//-------------CREATION DU PANIER--------------
 function myBasket(){
   
     var produitsLocalStorage =JSON.parse(localStorage.getItem('tableauItem'));
@@ -159,15 +158,14 @@ function myBasket(){
     if(produitsLocalStorage === null){
 
         console.log('panier est vide');   
-    } 
-    else{
-        
+    }else{  
         //let productsInBasket = [];
-        //productsInBasket.push(produitsLocalStorage);
-        
+        //productsInBasket.push(produitsLocalStorage);     
         console.log('id produitInBasket',idItemInBasket);
         console.log('mybasket',produitsLocalStorage);
+
         for(j=0; j < produitsLocalStorage.length; j++){
+
             //---------------AJOUT ID PRODUIT DANS TABLEAU ID--------------
             idItemInBasket.push(produitsLocalStorage[j].idProduit);
             console.log(produitsLocalStorage[j].idProduit);
@@ -183,8 +181,7 @@ function myBasket(){
             </tr> 
             `;
             itemBasket.insertAdjacentHTML('beforeend', structurePanier); 
-            
-
+  
             //-----------CALCUL DU PRIX TOTAL-------------------
             totalPriceTable.push(produitsLocalStorage[j].price);
             const reducer = (accumulator, currentValue ) => accumulator + currentValue;
@@ -197,15 +194,15 @@ function myBasket(){
             console.log(totalPriceAmount);
             totalPriceAmount.innerHTML = totalPrice + '€';
         }   
-        
-        console.log(produitsLocalStorage.length);
+       console.log(produitsLocalStorage.length);
     };
 
+};
 
 //----------------- STOCKAGE DATA USERS--------------
 function dataUser(){
     var userLocalStorage = JSON.parse(localStorage.getItem('dataUsers'));
-   
+
     var userFirstName = document.getElementById('user-first-name');
     userFirstName = userFirstName.value;
 
@@ -220,102 +217,119 @@ function dataUser(){
 
     var userEmail = document.getElementById('user-email');
     userEmail = userEmail.value;
-   
+
     var contactUser ={
-       firstName: userFirstName,
-       lastName: userLastName,
-       address: userAddress,
-       city: userCity,
-       email: userEmail,
-   };
+    firstName: userFirstName,
+    lastName: userLastName,
+    address: userAddress,
+    city: userCity,
+    email: userEmail,
+    };
 
-   if(userLocalStorage){
-    userLocalStorage.push(contactUser);
-    localStorage.setItem('dataUsers', JSON.stringify(userLocalStorage));
-   } 
-   else{
-    userLocalStorage = [];
-    userLocalStorage.push(contactUser);
-    localStorage.setItem('dataUsers', JSON.stringify(userLocalStorage));
-   };
+    if(userLocalStorage){
+        userLocalStorage.push(contactUser);
+        localStorage.setItem('dataUsers', JSON.stringify(userLocalStorage));
+    } 
+    else{
+        userLocalStorage = [];
+        userLocalStorage.push(contactUser);
+        localStorage.setItem('dataUsers', JSON.stringify(userLocalStorage));
+    };
 };
 
 
+//console.log(userProfil);
 
-};
 
 
-    const promise3 =  fetch("http://localhost:3000/api/teddies/order",{
-        method: 'POST',
-        headers: { 
-        'Accept': 'application/json', 
-        'Content-Type': 'application/json' 
+//------------------PROMISE DE TYPE POST---------------------
+const promise3 =  fetch("http://localhost:3000/api/teddies/order",{
+    method: 'POST',
+    headers: { 
+    'Accept': 'application/json', 
+    'Content-Type': 'application/json' 
+    },
+    body: JSON.stringify({
+        contact:{
+            firstName : 'firsName',
+            lastName: 'lastName',
+            address : 'address',
+            city: 'city',
+            email:'email'
         },
-        body: JSON.stringify({
-            contact:{
-                firstName : 'firsName',
-                lastName: 'lastName',
-                address : 'address',
-                city: 'city',
-                email:'email'
-            },
-            products:[],   
-        })   
-    });
+        products:[],   
+    })   
+});
 
-    promise3
-    .then (res=>res.json())
-    .then (data=>{
-        console.log('methodepost', data);
-        console.log(data.contact.firstName); 
-        console.log(JSON.parse(localStorage.getItem('tableauItem')));
-        console.log(data.orderId);
-       
-        //---------recupérer idProduit localStorage dans POST----------
-        var produitsLocalStorage = JSON.parse(localStorage.getItem('tableauItem'));
-        //console.log(produitsLocalStorage[1].idProduit);
-        var idItemInBasket = [];
-
-        if(produitsLocalStorage==null){
-            produitsLocalStorage=[];
-            
-        }else{
-            for(j=0; j < produitsLocalStorage.length; j++){
-                idItemInBasket.push(produitsLocalStorage[j].idProduit);
-            };
-        }
-
-        console.log(idItemInBasket);
-        data.products = idItemInBasket;
-
-        if(userLocalStorage==null){
-            localStorage.setItem('dataUsers', JSON.stringify(userLocalStorage));
-        } else{
-              //-----------récupérer usersData localStorage dans POST-------------
-        console.log(JSON.parse(localStorage.getItem('dataUsers')));
-        var userLocalStorage = JSON.parse(localStorage.getItem('dataUsers'));
+promise3
+.then (res=>res.json())
+.then (data=>{
+    console.log('methodepost', data);
+    console.log(data.contact.firstName); 
+    console.log(JSON.parse(localStorage.getItem('tableauItem')));
+    console.log(typeof(data.orderId));
     
-        data.contact.firstName = userLocalStorage.firstName;
-        data.contact.lastName = userLocalStorage.lastName;
-        data.contact.address = userLocalStorage.address;
-        data.contact.city = userLocalStorage.city;
-        data.contact.email = userLocalStorage.email;
+    //---------recupérer idProduit localStorage dans POST----------
+    var produitsLocalStorage = JSON.parse(localStorage.getItem('tableauItem'));
+    //console.log(produitsLocalStorage[1].idProduit);
+    var idItemInBasket = [];
+   if(produitsLocalStorage==null){
+        produitsLocalStorage=[];
+        
+    }else{
+        for(j=0; j < produitsLocalStorage.length; j++){
+            idItemInBasket.push(produitsLocalStorage[j].idProduit);
+        };
+    }
 
-        }
- 
-  });
+    console.log(idItemInBasket);
+    data.products = idItemInBasket;
 
 
+        //-----------récupérer usersData localStorage dans POST-------------
 
-  
-    
-     //--------------structure page de commande-------------
+    var userLocalStorage = JSON.parse(localStorage.getItem('dataUsers'));
+
+    if(userLocalStorage==undefined){
+        userLocalStorage = [];
+    }else{
+    //console.log(JSON.parse(localStorage.getItem('dataUsers')));
+     
+    data.contact.firstName = userLocalStorage[0].firstName;
+    data.contact.lastName = userLocalStorage[0].lastName;
+    data.contact.address = userLocalStorage[0].address;
+    data.contact.city = userLocalStorage[0].city;
+    data.contact.email = userLocalStorage[0].email;
+   }
+});
+
+
+//--------------structure page de commande-------------
 function validationCommande(){
     //console.log(JSON.parse(localStorage.getItem('dataUsers')));
-    var userData = JSON.parse(localStorage.getItem('dataUsers'));
-    console.log(userData[0].firstName);
+    var userLocalStorage = JSON.parse(localStorage.getItem('dataUsers'));
+    var produitsLocalStorage =JSON.parse(localStorage.getItem('tableauItem'));
+    console.log(userLocalStorage[0].firstName);
+  
+
+    //récupération éléments du DOM
     var firstNameField = document.getElementById('user-first-name');
-    firstNameField.innerHTML = userData.firstName;
+    var totalPriceField = document.getElementById('total-price-field');
+    var orderIdField = document.getElementById('orderId');
+     var totalPriceTable=[];
+
+    //remplacement contenu élément du DOM
+    firstNameField.innerHTML = userLocalStorage[0].firstName;  
+
+    for(j=0; j<produitsLocalStorage.length; j++){      
+         //-----------CALCUL DU PRIX TOTAL-------------------
+         totalPriceTable.push(produitsLocalStorage[j].price);
+         const reducer = (accumulator, currentValue ) => accumulator + currentValue;
+         console.log(reducer);
+         const totalPrice = totalPriceTable.reduce(reducer);
+         console.log("prix total", totalPrice);
+         totalPriceField.innerHTML =  totalPrice + '€';
+    };
     console.log(firstNameField);
 };
 
@@ -337,12 +351,13 @@ else if(window.location.pathname === "/FrontEnd/panier.html" || window.location.
     btnValider.addEventListener('click', function(event){
         event.preventDefault();
         dataUser();
-        validationCommande();
         var queryString = window.location.pathname;
         console.log(queryString);
 
     });
     
+}else if(window.location.pathname === "/FrontEnd/confirmation.html" || window.location.pathname == "/confirmation.html" || window.location.pathname =="/Orinoco-p5/FrontEnd/confirmation.html"){
+       validationCommande();
 }
 
 else{
