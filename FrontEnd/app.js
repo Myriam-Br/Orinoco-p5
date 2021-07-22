@@ -100,48 +100,62 @@ function getOursById(){
             myCart.preventDefault();
             
             var colorSelected = colorsSelector.value;
-            
-            var itemInStorage ={
-                idProduit:data._id,
-                name:data.name,
-                price:data.price/100,
-                colors:colorSelected,
-                quantite:0,
-            };  
-          
-            console.log(itemInStorage.idProduit);
-            console.log(typeof(itemInStorage.quantite));
-
+            console.log(colorSelected );
             //----------------STOCKAGE PRODUIT DU PANIER-------------
              
             var produitsLocalStorage =JSON.parse(localStorage.getItem('tableauItem'));
-
+           
+           
             //produitsLocalStorage = []; 
             //produitsLocalStorage.push(itemInStorage); 
-           // localStorage.setItem('tableauItem', JSON.stringify(produitsLocalStorage));     
-      
-           if (produitsLocalStorage==undefined) {  
-                produitsLocalStorage = [];     
-            }else{ 
-                itemInStorage = produitsLocalStorage.find(x => x.idProduit === data._id); 
-                itemInStorage.quantite = itemInStorage.quantite+1;                
-                //console.log(itemInStorage.quantite = itemInStorage.quantite+1); 
+           // localStorage.setItem('tableauItem', JSON.stringify(produitsLocalStorage));   
+            if (produitsLocalStorage==undefined) {  
+                produitsLocalStorage = [];  
+               
             }
 
-            produitsLocalStorage.push(itemInStorage); 
-            localStorage.setItem('tableauItem', JSON.stringify(produitsLocalStorage));    
+            var testIndex = produitsLocalStorage.findIndex(x => x.idProduit === data._id && x.color === colorSelected);           
+            if(testIndex==-1){
+                var itemInStorage ={
+                    idProduit:data._id,
+                    name:data.name,
+                    price:data.price/100,
+                    color:colorSelected,
+                    quantite:1,
+                };  
+                //objet n'existe pas dans le storage et il faut l'ajouter
+                produitsLocalStorage.push(itemInStorage);   
+                  
+                /*var idItemInBasket = JSON.parse(localStorage.getItem('tableauIdItem'));
+                idItemInBasket = [];
+                idItemInBasket.push(itemInStorage.idProduit);    
+                localStorage.setItem('tableauIdItem', JSON.stringify(idItemInBasket));*/             
+                 
+            }else{
+                //objet existe mais on modifie la qté
+                produitsLocalStorage[testIndex].quantite= produitsLocalStorage[testIndex].quantite+1;
+                console.log(produitsLocalStorage[testIndex].quantite);
+            }
 
-            console.log('mesProduits', produitsLocalStorage);
-            console.log("monProduit",itemInStorage.quantite);
+                 
+            localStorage.setItem('tableauItem', JSON.stringify(produitsLocalStorage));       
+            //itemInStorage = produitsLocalStorage.find(x => x.idProduit === data._id); 
+            //console.log('récup ligne prdt',produitsLocalStorage.find(x => x.idProduit === data._id));
+            //itemInStorage.quantite = itemInStorage.quantite+1;      
+            //console.log(itemInStorage.quantite );          
+            //console.log(itemInStorage.quantite = itemInStorage.quantite+1);                 
+
         });
-  
+
+
+
     });
 };
 
 //console.log(localStorage.setItem('produit', 'my variable'));
 console.log(localStorage);
 //console.log(localStorage.getItem('tableauItem'));
-console.log(JSON.parse(localStorage.getItem('tableauItem')));
+//console.log(JSON.parse(localStorage.getItem('tableauItem')));
 
 
 
@@ -175,7 +189,7 @@ function myBasket(){
             var structurePanier = `
             <tr class="tbody-item">
             <td>${produitsLocalStorage[j].name}</td>
-            <td>${produitsLocalStorage[j].colors}</td>
+            <td>${produitsLocalStorage[j].color}</td>
             <td>${produitsLocalStorage[j].quantite}</td>
             <td>${produitsLocalStorage[j].price+"€"}</td>
             </tr> 
@@ -183,7 +197,7 @@ function myBasket(){
             itemBasket.insertAdjacentHTML('beforeend', structurePanier); 
   
             //-----------CALCUL DU PRIX TOTAL-------------------
-            totalPriceTable.push(produitsLocalStorage[j].price);
+            totalPriceTable.push(produitsLocalStorage[j].price*produitsLocalStorage[j].quantite);
             const reducer = (accumulator, currentValue ) => accumulator + currentValue;
             console.log(reducer);
     
@@ -203,6 +217,7 @@ function myBasket(){
 function dataUser(){
     var userLocalStorage = JSON.parse(localStorage.getItem('dataUsers'));
 
+    //récupération élément form du DOM
     var userFirstName = document.getElementById('user-first-name');
     userFirstName = userFirstName.value;
 
@@ -218,31 +233,83 @@ function dataUser(){
     var userEmail = document.getElementById('user-email');
     userEmail = userEmail.value;
 
-    var contactUser ={
-    firstName: userFirstName,
-    lastName: userLastName,
-    address: userAddress,
-    city: userCity,
-    email: userEmail,
-    };
 
-    if(userLocalStorage){
-        userLocalStorage.push(contactUser);
-        localStorage.setItem('dataUsers', JSON.stringify(userLocalStorage));
-    } 
-    else{
-        userLocalStorage = [];
-        userLocalStorage.push(contactUser);
-        localStorage.setItem('dataUsers', JSON.stringify(userLocalStorage));
-    };
+    //verification du formulaire 
+    if(userFirstName == ""){
+        let requireFirstName = document.getElementById('require-firstname');
+        requireFirstName.innerHTML = "Veuillez entrer votre prénom";     
+    }
+
+    if(userLastName == ""){
+        let requireLastName = document.getElementById('require-lastname');
+        requireLastName.innerHTML = "Veuillez entrer votre nom"; 
+    }
+
+    if(userAddress == ""){
+        let requireAdress = document.getElementById('require-adress');
+        requireAdress.innerHTML = "Veuillez entrer votre adresse"; 
+    }
+
+    if(userCity == ""){
+        let requireCity = document.getElementById('require-city');
+        requireCity.innerHTML = "Veuillez entrer votre ville"; 
+    }
+    if(userEmail == ""){
+        let requireEmail = document.getElementById('require-email');
+        requireEmail.innerHTML = "Veuillez entrer votre email"; 
+        return false;
+    } else if(userEmail.indexOf("@", 0) < 0) {
+        let requireEmail = document.getElementById('require-email');
+        requireEmail.innerHTML = "Veuillez entrer un email valide"; 
+    }
+
+
+    //stockage dataUser dans localStorage
+    //var userFirstNameStorage = localStorage.getItem('userFirstName');
+    localStorage.setItem('userFirstName', userFirstName);
+   // console.log(userFirstNameStorage);
+
+    //var userLastNameStorage = localStorage.getItem('userLastName');
+    localStorage.setItem('userLastName', userLastName);
+    
+    //var userAddressStorage = localStorage.getItem('userAdress');
+    localStorage.setItem('userAdress', userAddress);
+
+    //var userCityStorage = localStorage.getItem('userCity');
+    localStorage.setItem('userCity',userCity);
+
+   // var userEmailStorage = localStorage.getItem('userEmail');
+    localStorage.setItem('userEmail', userEmail);
+
 };
 
-
+//dataUser();
 //console.log(userProfil);
 
-
-
 //------------------PROMISE DE TYPE POST---------------------
+
+  //---------recupérer idProduit localStorage dans POST----------
+ var produitsLocalStorage = JSON.parse(localStorage.getItem('tableauItem'));
+  console.log(produitsLocalStorage);
+  //console.log(produitsLocalStorage[1].idProduit);
+  var idItemInBasket = [];
+    if(produitsLocalStorage==null){
+        produitsLocalStorage=[];
+        
+    }else{
+        for(j=0; j < produitsLocalStorage.length; j++){
+            idItemInBasket.push(produitsLocalStorage[j].idProduit);
+        };
+    };
+
+// récupération données user du localStorage
+var userFirstNameStorage = localStorage.getItem('userFirstName');
+var userLastNameStorage = localStorage.getItem('userLastName');
+var userAddressStorage = localStorage.getItem('userAdress');
+var userCityStorage = localStorage.getItem('userCity');
+var userEmailStorage = localStorage.getItem('userEmail');
+
+
 const promise3 =  fetch("http://localhost:3000/api/teddies/order",{
     method: 'POST',
     headers: { 
@@ -250,87 +317,66 @@ const promise3 =  fetch("http://localhost:3000/api/teddies/order",{
     'Content-Type': 'application/json' 
     },
     body: JSON.stringify({
+
         contact:{
-            firstName : 'firsName',
-            lastName: 'lastName',
-            address : 'address',
-            city: 'city',
-            email:'email'
+            firstName : userFirstNameStorage,
+            lastName: userLastNameStorage,
+            address : userAddressStorage,
+            city: userCityStorage,
+            email:userEmailStorage,
         },
-        products:[],   
+
+        products:idItemInBasket,   
     })   
 });
+
 
 promise3
 .then (res=>res.json())
 .then (data=>{
-    console.log('methodepost', data);
-    console.log(data.contact.firstName); 
-    console.log(JSON.parse(localStorage.getItem('tableauItem')));
-    console.log(typeof(data.orderId));
-    
-    //---------recupérer idProduit localStorage dans POST----------
-    var produitsLocalStorage = JSON.parse(localStorage.getItem('tableauItem'));
-    //console.log(produitsLocalStorage[1].idProduit);
-    var idItemInBasket = [];
-   if(produitsLocalStorage==null){
-        produitsLocalStorage=[];
-        
-    }else{
-        for(j=0; j < produitsLocalStorage.length; j++){
-            idItemInBasket.push(produitsLocalStorage[j].idProduit);
-        };
-    }
+ console.log(data);
+//récupération orderId
+localStorage.setItem('orderId',data.orderId); 
 
-    console.log(idItemInBasket);
-    data.products = idItemInBasket;
-
-
-        //-----------récupérer usersData localStorage dans POST-------------
-
-    var userLocalStorage = JSON.parse(localStorage.getItem('dataUsers'));
-
-    if(userLocalStorage==undefined){
-        userLocalStorage = [];
-    }else{
-    //console.log(JSON.parse(localStorage.getItem('dataUsers')));
-     
-    data.contact.firstName = userLocalStorage[0].firstName;
-    data.contact.lastName = userLocalStorage[0].lastName;
-    data.contact.address = userLocalStorage[0].address;
-    data.contact.city = userLocalStorage[0].city;
-    data.contact.email = userLocalStorage[0].email;
-   }
 });
 
 
 //--------------structure page de commande-------------
 function validationCommande(){
     //console.log(JSON.parse(localStorage.getItem('dataUsers')));
-    var userLocalStorage = JSON.parse(localStorage.getItem('dataUsers'));
+    var userFirstNameStorage = localStorage.getItem('userFirstName');
     var produitsLocalStorage =JSON.parse(localStorage.getItem('tableauItem'));
-    console.log(userLocalStorage[0].firstName);
-  
+    var recuprOrderId = localStorage.getItem('orderId');
+    console.log(recuprOrderId);
+    
 
     //récupération éléments du DOM
     var firstNameField = document.getElementById('user-first-name');
     var totalPriceField = document.getElementById('total-price-field');
+    
     var orderIdField = document.getElementById('orderId');
      var totalPriceTable=[];
 
-    //remplacement contenu élément du DOM
-    firstNameField.innerHTML = userLocalStorage[0].firstName;  
+    //-----remplacement contenu élément du DOM----------
 
+        //firstname
+    firstNameField.innerHTML = userFirstNameStorage;
+    
+        //totalprice
+    
     for(j=0; j<produitsLocalStorage.length; j++){      
          //-----------CALCUL DU PRIX TOTAL-------------------
-         totalPriceTable.push(produitsLocalStorage[j].price);
+         totalPriceTable.push(produitsLocalStorage[j].price*produitsLocalStorage[j].quantite);
          const reducer = (accumulator, currentValue ) => accumulator + currentValue;
          console.log(reducer);
          const totalPrice = totalPriceTable.reduce(reducer);
          console.log("prix total", totalPrice);
          totalPriceField.innerHTML =  totalPrice + '€';
     };
-    console.log(firstNameField);
+
+        //orderId
+    orderIdField.innerHTML = recuprOrderId;
+
 };
 
 
@@ -338,8 +384,8 @@ function validationCommande(){
 if (idOurs){
     getOursById(idOurs);
     console.log('produit')
-}
-else if(window.location.pathname === "/FrontEnd/panier.html" || window.location.pathname == "/panier.html" || window.location.pathname =="/Orinoco-p5/FrontEnd/panier.html"){
+
+}else if(window.location.pathname === "/FrontEnd/panier.html" || window.location.pathname == "/panier.html" || window.location.pathname =="/Orinoco-p5/FrontEnd/panier.html"){
     console.log('panier');
     myBasket();
 
@@ -353,14 +399,12 @@ else if(window.location.pathname === "/FrontEnd/panier.html" || window.location.
         dataUser();
         var queryString = window.location.pathname;
         console.log(queryString);
-
     });
     
 }else if(window.location.pathname === "/FrontEnd/confirmation.html" || window.location.pathname == "/confirmation.html" || window.location.pathname =="/Orinoco-p5/FrontEnd/confirmation.html"){
        validationCommande();
-}
 
-else{
+}else{
     console.log('index');
     getOursList();
 };
