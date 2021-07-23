@@ -50,7 +50,7 @@ ul{
 }
 
 #navItems{
-    display: block;
+    display: none;
     background-color: rgba(0, 0, 0, 0.794);
     text-align: center;
     position: absolute;
@@ -172,7 +172,6 @@ select{
 }
 
 
-
 .btn-add-to-basket{
     width: 95%;
     height: 35px;
@@ -185,9 +184,7 @@ select{
     background-image: linear-gradient(190deg,#ffc0cb, #d1c6eb);
 }
 
-
 /*style page panier*/
-
 
 table{
     border: black solid 2px;
@@ -250,6 +247,17 @@ border-radius: 8px;
 background-image: linear-gradient(190deg,#ffc0cb, #d1c6eb);
 align-self: center;
 }
+
+
+/*style page confirmation*/
+#confirmation-commande{
+    margin-bottom: 10px;
+}
+#retour-accueil{
+    font-size: 16px;
+    font-weight: 500;
+}
+
 
 /*footer*/
 footer{
