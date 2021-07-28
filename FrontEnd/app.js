@@ -1,16 +1,3 @@
-//-------------TOGGLE NAVIGATION-----------
-   
-function toggleMenu(){  
-    var navigation = document.getElementById('navItems');    
-    navigation.style.display = 'none';
-
-    if(navigation.style.display = 'none'){
-    navigation.style.display= 'block';
-    }else{
-    navigation.style.display = 'none';
-    } 
-};
- 
 
 //--------------------------PAGE ACCUEIL-----------------
 //-------PROMISE DE TYPE GET -> getOursList-------------
@@ -42,7 +29,7 @@ function getOursList(){
         };
     });
 
-}
+};
 
 
 
@@ -63,90 +50,98 @@ function getOursById(){
     promise2
         .then (res => res.json())
         .then(data => {
-        const cardContainer = document.getElementById('card-container');
-        var structureCard  = `
-        <div class="card">
-        <img src="${data.imageUrl}" alt="" class="image">
-        <div class="name">${data.name}</div>
-        <div class="price">${data.price/100} <span>€</span></div>
-        <select class="colors">${data.colors}</select>
-        <div class="description">${data.description}</div>
-        <button type="submit" class="btn-add-to-basket">AJOUTER DANS PANIER</button>
-        </div>
-        `;
-        cardContainer.insertAdjacentHTML("beforeend" ,structureCard);
-        
-        const colorsSelector= document.querySelector('.colors');
-        var optionColor= data.colors;
-            let structureOptions =[];
-            console.log('democolor', optionColor);
-            for (let i = 0; i< optionColor.length; i++){
-                structureOptions = structureOptions + `
-                <option> ${optionColor[i]}</option>
-                `;
-            };
+
+            const cardContainer = document.getElementById('card-container');
+            var structureCard  = `
+            <div class="card">
+            <img src="${data.imageUrl}" alt="" class="image">
+            <div class="name">${data.name}</div>
+            <div class="price">${data.price/100} <span>€</span></div>
+            <select class="colors">${data.colors}</select>
+            <div class="description">${data.description}</div>
+            <button type="submit" class="btn-add-to-basket">AJOUTER DANS PANIER</button>
+            </div>
+            `;
+
+            cardContainer.insertAdjacentHTML("beforeend" ,structureCard);
+            
+            const colorsSelector= document.querySelector('.colors');
+            var optionColor= data.colors;
+                let structureOptions =[];
+                console.log('democolor', optionColor);
+                for (let i = 0; i< optionColor.length; i++){
+                    structureOptions = structureOptions + `
+                    <option> ${optionColor[i]}</option>
+                    `;
+                };
             colorsSelector.innerHTML = structureOptions;
             console.log(colorsSelector);
-
-
-        var btnSelect = document.querySelector('.btn-add-to-basket');
-        console.log('btn', btnSelect);
-
-        btnSelect.addEventListener('click', function(myCart){
-            myCart.preventDefault();
             
-            var colorSelected = colorsSelector.value;
-            console.log(colorSelected );
-            //----------------STOCKAGE PRODUIT DU PANIER-------------
-             
-            var produitsLocalStorage =JSON.parse(localStorage.getItem('tableauItem'));
            
-           
-            //produitsLocalStorage = []; 
-            //produitsLocalStorage.push(itemInStorage); 
-           // localStorage.setItem('tableauItem', JSON.stringify(produitsLocalStorage));   
-            if (produitsLocalStorage==undefined) {  
-                produitsLocalStorage = [];  
+            var count = 0;
+            localStorage.setItem('count', count);
+            
+
+            var btnSelect = document.querySelector('.btn-add-to-basket');
+            console.log('btn', btnSelect);
+
+            btnSelect.addEventListener('click', function(myCart){
+                myCart.preventDefault();
+                count = count+1;
+
+                var colorSelected = colorsSelector.value;
+                console.log(colorSelected );
+                //----------------STOCKAGE PRODUIT DU PANIER-------------
+                
+                var produitsLocalStorage = JSON.parse(localStorage.getItem('tableauItem'));
+                if (produitsLocalStorage==undefined) {  
+                    produitsLocalStorage = [];      
+                }
+                var testIndex = produitsLocalStorage.findIndex(x => x.idProduit === data._id && x.color === colorSelected);           
+                if(testIndex==-1){
+                    
+                    var itemInStorage ={
+                        idProduit:data._id,
+                        name:data.name,
+                        price:data.price/100,
+                        color:colorSelected,
+                        quantite:1,
+                    };  
+
+                    //objet n'existe pas dans le storage et il faut l'ajouter
+                    produitsLocalStorage.push(itemInStorage); 
+
+                    /*var idItemInBasket = JSON.parse(localStorage.getItem('tableauIdItem'));
+                    idItemInBasket = [];
+                    idItemInBasket.push(itemInStorage.idProduit);    
+                    localStorage.setItem('tableauIdItem', JSON.stringify(idItemInBasket));*/             
+                    
+                }else{
+                    //objet existe mais on modifie la qté
+                    produitsLocalStorage[testIndex].quantite= produitsLocalStorage[testIndex].quantite+1;
+                    console.log(produitsLocalStorage[testIndex].quantite);
+                }
+                
+                localStorage.setItem('tableauItem', JSON.stringify(produitsLocalStorage));       
+                //itemInStorage = produitsLocalStorage.find(x => x.idProduit === data._id); 
+                //console.log('récup ligne prdt',produitsLocalStorage.find(x => x.idProduit === data._id));
+                //itemInStorage.quantite = itemInStorage.quantite+1;      
+                //console.log(itemInStorage.quantite );          
+                //console.log(itemInStorage.quantite = itemInStorage.quantite+1);                 
+                 
+
+                var productCount = document.getElementById('produit-count');
+
+                productCount.innerHTML = count;
+                console.log(count);
                
-            }
+            });
 
-            var testIndex = produitsLocalStorage.findIndex(x => x.idProduit === data._id && x.color === colorSelected);           
-            if(testIndex==-1){
-                var itemInStorage ={
-                    idProduit:data._id,
-                    name:data.name,
-                    price:data.price/100,
-                    color:colorSelected,
-                    quantite:1,
-                };  
-                //objet n'existe pas dans le storage et il faut l'ajouter
-                produitsLocalStorage.push(itemInStorage);   
-                  
-                /*var idItemInBasket = JSON.parse(localStorage.getItem('tableauIdItem'));
-                idItemInBasket = [];
-                idItemInBasket.push(itemInStorage.idProduit);    
-                localStorage.setItem('tableauIdItem', JSON.stringify(idItemInBasket));*/             
-                 
-            }else{
-                //objet existe mais on modifie la qté
-                produitsLocalStorage[testIndex].quantite= produitsLocalStorage[testIndex].quantite+1;
-                console.log(produitsLocalStorage[testIndex].quantite);
-            }
-
-                 
-            localStorage.setItem('tableauItem', JSON.stringify(produitsLocalStorage));       
-            //itemInStorage = produitsLocalStorage.find(x => x.idProduit === data._id); 
-            //console.log('récup ligne prdt',produitsLocalStorage.find(x => x.idProduit === data._id));
-            //itemInStorage.quantite = itemInStorage.quantite+1;      
-            //console.log(itemInStorage.quantite );          
-            //console.log(itemInStorage.quantite = itemInStorage.quantite+1);                 
+        
 
         });
-
-
-
-    });
 };
+
 
 //console.log(localStorage.setItem('produit', 'my variable'));
 console.log(localStorage);
@@ -248,7 +243,7 @@ function dataUser(){
     }else{
         //stockage userlastname 
         console.log('nom enregistré');
-        localStorage.setItem('userLastName', userFirstName);
+        localStorage.setItem('userLastName', userLastName);
     }
 
 
@@ -259,7 +254,7 @@ function dataUser(){
     }else{
         //stockage useradress 
         console.log('adresse enregistré');
-        localStorage.setItem('userAdress', userFirstName);
+        localStorage.setItem('userAdress', userAddress);
     }
 
     if(userCity == ""){
@@ -269,7 +264,7 @@ function dataUser(){
     }else{
         //stockage usercity
         console.log('ville enregistré');
-        localStorage.setItem('userCity', userFirstName);
+        localStorage.setItem('userCity', userCity);
     }
 
     let requireEmail = document.getElementById('require-email');
@@ -285,7 +280,7 @@ function dataUser(){
         //stockage useremail
         console.log('email enregistré');
         requireEmail.innerHTML = ""; 
-        localStorage.setItem('userEmail', userFirstName);
+        localStorage.setItem('userEmail', userEmail);
     }
 
     return sendForm;
