@@ -229,11 +229,12 @@ function dataUser(){
     var userEmail = document.getElementById('user-email');
     userEmail = userEmail.value;
 
-
+    var sendForm= true;
     //verification du formulaire 
     if(userFirstName == ""){
         let requireFirstName = document.getElementById('require-firstname');
-        requireFirstName.innerHTML = "Veuillez entrer votre prénom";    
+        requireFirstName.innerHTML = "Veuillez entrer votre prénom";  
+        sendForm = false;  
     } else{
         //stockage userfirstname 
         console.log('prénom enregistré');
@@ -243,6 +244,7 @@ function dataUser(){
     if(userLastName == ""){
         let requireLastName = document.getElementById('require-lastname');
         requireLastName.innerHTML = "Veuillez entrer votre nom"; 
+        sendForm = false;  
     }else{
         //stockage userlastname 
         console.log('nom enregistré');
@@ -253,6 +255,7 @@ function dataUser(){
     if(userAddress == ""){
         let requireAdress = document.getElementById('require-adress');
         requireAdress.innerHTML = "Veuillez entrer votre adresse"; 
+        sendForm = false;  
     }else{
         //stockage useradress 
         console.log('adresse enregistré');
@@ -262,36 +265,44 @@ function dataUser(){
     if(userCity == ""){
         let requireCity = document.getElementById('require-city');
         requireCity.innerHTML = "Veuillez entrer votre ville"; 
+        sendForm = false;  
     }else{
         //stockage usercity
         console.log('ville enregistré');
         localStorage.setItem('userCity', userFirstName);
     }
 
+    let requireEmail = document.getElementById('require-email');
     if(userEmail == ""){
-        let requireEmail = document.getElementById('require-email');
+     
         requireEmail.innerHTML = "Veuillez entrer votre email"; 
-      
+        sendForm = false;       
     } else if(userEmail.indexOf("@", 0) < 0) {
-        let requireEmail = document.getElementById('require-email');
+       
         requireEmail.innerHTML = "Veuillez entrer un email valide"; 
+        sendForm = false;  
     }else{
         //stockage useremail
         console.log('email enregistré');
+        requireEmail.innerHTML = ""; 
         localStorage.setItem('userEmail', userFirstName);
     }
+
+    return sendForm;
 };
+
 
 //dataUser();
 //console.log(userProfil);
 
 //------------------PROMISE DE TYPE POST---------------------
 
-  //---------recupérer idProduit localStorage dans POST----------
- var produitsLocalStorage = JSON.parse(localStorage.getItem('tableauItem'));
- //var idItemLocalStorage = localStorage.getItem('tableauId');
-  //console.log(produitsLocalStorage);
-  //console.log(produitsLocalStorage[1].idProduit);
+function dataBasketPost(sendForm){
+    //---------recupérer idProduit localStorage dans POST----------
+    var produitsLocalStorage = JSON.parse(localStorage.getItem('tableauItem'));
+    //var idItemLocalStorage = localStorage.getItem('tableauId');
+    //console.log(produitsLocalStorage);
+    //console.log(produitsLocalStorage[1].idProduit);
 
     if(produitsLocalStorage==null){
         produitsLocalStorage=[];
@@ -301,50 +312,55 @@ function dataUser(){
         var idItemInBasket=[];        
         for(j=0; j < produitsLocalStorage.length; j++){
             idItemInBasket.push(produitsLocalStorage[j].idProduit);
-           // console.log(idItemInBasket.push(produitsLocalStorage[j].idProduit));
+            // console.log(idItemInBasket.push(produitsLocalStorage[j].idProduit));
         };
-        localStorage.setItem('idtab', idItemInBasket);
+
+        localStorage.setItem('idtab', idItemInBasket.join());
     };
 
-// récupération données user du localStorage
-var userFirstNameStorage = localStorage.getItem('userFirstName');
-var userLastNameStorage = localStorage.getItem('userLastName');
-var userAddressStorage = localStorage.getItem('userAdress');
-var userCityStorage = localStorage.getItem('userCity');
-var userEmailStorage = localStorage.getItem('userEmail');
+    //récuperation id produit local storage
+    //qvar idItemLocalStorage = localStorage.getItem('tableauId');
+    if(idItemInBasket==[]){
+    console.log('le panier est vide');
+    sendForm = false;  
+    };
 
-//récuperation id produit local storage
-//qvar idItemLocalStorage = localStorage.getItem('tableauId');
-
-const promise3 =  fetch("http://localhost:3000/api/teddies/order",{
-    method: 'POST',
-    headers: { 
-    'Accept': 'application/json', 
-    'Content-Type': 'application/json' 
-    },
-    body: JSON.stringify({
-
-        contact:{
-            firstName : userFirstNameStorage,
-            lastName: userLastNameStorage,
-            address : userAddressStorage,
-            city: userCityStorage,
-            email:userEmailStorage,
+    if(sendForm){
+        const promise3 =  fetch("http://localhost:3000/api/teddies/order",{
+        method: 'POST',
+        headers: { 
+        'Accept': 'application/json', 
+        'Content-Type': 'application/json' 
         },
+        body: JSON.stringify({
 
-        products:idItemInBasket,   
-    })   
-});
-console.log(promise3);
+            contact:{
+                firstName : localStorage.getItem('userFirstName'),
+                lastName : localStorage.getItem('userLastName'),
+                address : localStorage.getItem('userAdress'),
+                city : localStorage.getItem('userCity'),
+                email : localStorage.getItem('userEmail'),
+            },
+
+            products:localStorage.getItem('idtab').split(','),   
+        })   
+    });
+    console.log(promise3);
+
+        promise3
+        .then (res=>res.json())
+        .then (data=>{
+        console.log(data);
+        //récupération orderId
+        localStorage.setItem('orderId',data.orderId); 
+        pageConfirmation();
+        });
 
 
-promise3
-.then (res=>res.json())
-.then (data=>{
- console.log(data);
-//récupération orderId
-localStorage.setItem('orderId',data.orderId); 
-});
+    };
+
+}
+ 
 
 
 //--------------structure page de commande-------------
@@ -387,9 +403,8 @@ function validationCommande(){
 
 //renvoie page confirmation (à changer)
 function pageConfirmation(){
-    window.location.assign("http://127.0.0.1:5500/confirmation.html")
-} 
-
+    document.location.href="./confirmation.html";
+};
 //-------------REDIRECTION VERS LES DIFFERENTES PAGES DU SITE-----------//
 if (idOurs){
     getOursById(idOurs);
@@ -403,9 +418,10 @@ if (idOurs){
     var btnValider = document.getElementById('btn-valider');
     console.log('mybtn', btnValider);
     //------------écouter événement et lancer fontion valider--------
-    btnValider.addEventListener('click', function(event){
+    btnValider.addEventListener('click', async function(event){
         event.preventDefault();
-        dataUser();
+        var sendForm = await dataUser();
+        dataBasketPost(sendForm);
     });
  
 }else if(window.location.pathname === "/FrontEnd/confirmation.html" || window.location.pathname == "/confirmation.html" || window.location.pathname =="/Orinoco-p5/FrontEnd/confirmation.html"){
