@@ -77,26 +77,25 @@ function getOursById(){
             colorsSelector.innerHTML = structureOptions;
             console.log(colorsSelector);
             
-           
-            var count = 0;
-            localStorage.setItem('count', count);
-            
-
             var btnSelect = document.querySelector('.btn-add-to-basket');
             console.log('btn', btnSelect);
+            
+            var count = 0;
 
             btnSelect.addEventListener('click', function(myCart){
                 myCart.preventDefault();
-                count = count+1;
 
                 var colorSelected = colorsSelector.value;
                 console.log(colorSelected );
+            
+                 
                 //----------------STOCKAGE PRODUIT DU PANIER-------------
                 
                 var produitsLocalStorage = JSON.parse(localStorage.getItem('tableauItem'));
                 if (produitsLocalStorage==undefined) {  
                     produitsLocalStorage = [];      
-                }
+                } 
+       
                 var testIndex = produitsLocalStorage.findIndex(x => x.idProduit === data._id && x.color === colorSelected);           
                 if(testIndex==-1){
                     
@@ -107,41 +106,35 @@ function getOursById(){
                         color:colorSelected,
                         quantite:1,
                     };  
-
                     //objet n'existe pas dans le storage et il faut l'ajouter
                     produitsLocalStorage.push(itemInStorage); 
-
+                    count = count +1;
+               
                     /*var idItemInBasket = JSON.parse(localStorage.getItem('tableauIdItem'));
                     idItemInBasket = [];
                     idItemInBasket.push(itemInStorage.idProduit);    
-                    localStorage.setItem('tableauIdItem', JSON.stringify(idItemInBasket));*/             
-                    
+                    localStorage.setItem('tableauIdItem', JSON.stringify(idItemInBasket));*/                      
                 }else{
                     //objet existe mais on modifie la qté
                     produitsLocalStorage[testIndex].quantite= produitsLocalStorage[testIndex].quantite+1;
                     console.log(produitsLocalStorage[testIndex].quantite);
+                    count = count +1;
                 }
                 
                 localStorage.setItem('tableauItem', JSON.stringify(produitsLocalStorage));       
                 //itemInStorage = produitsLocalStorage.find(x => x.idProduit === data._id); 
                 //console.log('récup ligne prdt',produitsLocalStorage.find(x => x.idProduit === data._id));
-                //itemInStorage.quantite = itemInStorage.quantite+1;      
-                //console.log(itemInStorage.quantite );          
-                //console.log(itemInStorage.quantite = itemInStorage.quantite+1);                 
-                 
-
+                localStorage.setItem('productcount', count); 
+                    
                 var productCount = document.getElementById('produit-count');
-
-                productCount.innerHTML = count;
-                console.log(count);
-               
+                //console.log(productCount);
+                productCount.innerHTML = localStorage.getItem('productcount');
+                //console.log(localStorage.getItem('productcount'));
             });
-
-        
-
+         
+           
         });
 };
-
 
 //console.log(localStorage.setItem('produit', 'my variable'));
 console.log(localStorage);
@@ -206,7 +199,6 @@ function myBasket(){
 
 //----------------- STOCKAGE DATA USERS--------------
 function dataUser(){
-    var userLocalStorage = JSON.parse(localStorage.getItem('dataUsers'));
 
     //récupération élément form du DOM
     var userFirstName = document.getElementById('user-first-name');
@@ -224,64 +216,90 @@ function dataUser(){
     var userEmail = document.getElementById('user-email');
     userEmail = userEmail.value;
 
-    var sendForm= true;
-    //verification du formulaire 
+    var sendForm = true;
+    //-----------------verification du formulaire---------------//
+
+    
+
+    //verification firstName
+    let requireFirstName = document.getElementById('require-firstname');
+    var letterFilter = /^[a-z]+$/i;
     if(userFirstName == ""){
-        let requireFirstName = document.getElementById('require-firstname');
         requireFirstName.innerHTML = "Veuillez entrer votre prénom";  
         sendForm = false;  
-    } else{
+    } else if(!userFirstName.match(letterFilter)){
+        requireFirstName.innerHTML = "Veuillez entrer un prénom valide";  
+        sendForm = false
+    }else{
         //stockage userfirstname 
         console.log('prénom enregistré');
-        localStorage.setItem('userFirstName', userFirstName);
-    }
+        requireFirstName.innerHTML = "";  
+        localStorage.setItem('userFirstName', userFirstName);    
+    };
 
+    //verification lastName
+    let requireLastName = document.getElementById('require-lastname');
     if(userLastName == ""){
-        let requireLastName = document.getElementById('require-lastname');
         requireLastName.innerHTML = "Veuillez entrer votre nom"; 
         sendForm = false;  
+    } else if(!userLastName.match(letterFilter)){
+        requireLastName.innerHTML = "Veuillez entrer un nom valide";  
+        sendForm = false
     }else{
         //stockage userlastname 
         console.log('nom enregistré');
+        requireLastName.innerHTML = ""; 
         localStorage.setItem('userLastName', userLastName);
-    }
+    };
 
-
+    //verification adresse
+    let requireAdress = document.getElementById('require-adress');
+    var adressFilter = /^[a-zA-Z0-9\s,'-]*$/;
     if(userAddress == ""){
-        let requireAdress = document.getElementById('require-adress');
         requireAdress.innerHTML = "Veuillez entrer votre adresse"; 
         sendForm = false;  
+    } else if(!userAddress.match(adressFilter)){
+        requireAdress.innerHTML = "Veuillez entrer une adresse valide";  
+        sendForm = false
     }else{
         //stockage useradress 
         console.log('adresse enregistré');
+        requireAdress.innerHTML = "";
         localStorage.setItem('userAdress', userAddress);
-    }
+    };
 
+    //verification city
+    let requireCity = document.getElementById('require-city');
+    var cityFilter = /^[a-zA-Z]+(?:[\s-][a-zA-Z]+)*$/;
     if(userCity == ""){
-        let requireCity = document.getElementById('require-city');
         requireCity.innerHTML = "Veuillez entrer votre ville"; 
         sendForm = false;  
+    } else if(!userCity.match(cityFilter)){
+        requireCity.innerHTML = "Veuillez entrer une ville valide";  
+        sendForm = false
     }else{
         //stockage usercity
         console.log('ville enregistré');
+        requireCity.innerHTML = ""; 
         localStorage.setItem('userCity', userCity);
-    }
+    };
 
+    //verification email
     let requireEmail = document.getElementById('require-email');
+    var emailFilter = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
     if(userEmail == ""){
-     
         requireEmail.innerHTML = "Veuillez entrer votre email"; 
         sendForm = false;       
-    } else if(userEmail.indexOf("@", 0) < 0) {
-       
-        requireEmail.innerHTML = "Veuillez entrer un email valide"; 
+    }
+    else if(!userEmail.match(emailFilter)) {
+        requireEmail.innerHTML = "Veuillez entrer un email valide";
         sendForm = false;  
     }else{
         //stockage useremail
-        console.log('email enregistré');
         requireEmail.innerHTML = ""; 
+        console.log('email enregistré');
         localStorage.setItem('userEmail', userEmail);
-    }
+    };
 
     return sendForm;
 };
@@ -357,7 +375,6 @@ function dataBasketPost(sendForm){
 }
  
 
-
 //--------------structure page de commande-------------
 function validationCommande(){
     //console.log(JSON.parse(localStorage.getItem('dataUsers')));
@@ -396,19 +413,23 @@ function validationCommande(){
 
 };
 
+
+
+//-------------REDIRECTION VERS LES DIFFERENTES PAGES DU SITE-----------//
+
 //renvoie page confirmation (à changer)
 function pageConfirmation(){
     document.location.href="./confirmation.html";
 };
-//-------------REDIRECTION VERS LES DIFFERENTES PAGES DU SITE-----------//
+
 if (idOurs){
     getOursById(idOurs);
-    console.log('produit')
+    console.log('produit');
 
 }else if(window.location.pathname === "/FrontEnd/panier.html" || window.location.pathname == "/panier.html" || window.location.pathname =="/Orinoco-p5/FrontEnd/panier.html"){
     console.log('panier');
     myBasket();
-
+   
     //----------------ENVOIE DONNEE USER FORM VERS LOCAL STORAGE------------------
     var btnValider = document.getElementById('btn-valider');
     console.log('mybtn', btnValider);
@@ -425,5 +446,6 @@ if (idOurs){
 }else{
     console.log('index');
     getOursList();
+
 };
 
