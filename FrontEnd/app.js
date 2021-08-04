@@ -35,17 +35,17 @@ function getOursList(){
 
 //----------PROMISE DE TYPE GET -> getOursById-------------
 
-//récupération de la chaine de requête (querystring)
-var queryString = window.location.search;
-console.log(queryString);
-const urlSearchParams = new URLSearchParams(queryString);
-let idOurs = urlSearchParams.get('id');
+
+
+
 //console.log(idOurs);
 
 //affichage du produit (de l'objet) qui a été sélectionné par l'id
 
 //--- Methode 1: avec fetch et en mettant la valeur de l'id à la fin de l'url
-function getOursById(){
+function getOursById(idOurs){
+
+
     const promise2=  fetch ('http://localhost:3000/api/teddies/'+idOurs)
     promise2
         .then (res => res.json())
@@ -80,7 +80,7 @@ function getOursById(){
             var btnSelect = document.querySelector('.btn-add-to-basket');
             console.log('btn', btnSelect);
             
-            var count = 0;
+            
 
             btnSelect.addEventListener('click', function(myCart){
                 myCart.preventDefault();
@@ -95,7 +95,8 @@ function getOursById(){
                 if (produitsLocalStorage==undefined) {  
                     produitsLocalStorage = [];      
                 } 
-       
+                
+
                 var testIndex = produitsLocalStorage.findIndex(x => x.idProduit === data._id && x.color === colorSelected);           
                 if(testIndex==-1){
                     
@@ -108,8 +109,7 @@ function getOursById(){
                     };  
                     //objet n'existe pas dans le storage et il faut l'ajouter
                     produitsLocalStorage.push(itemInStorage); 
-                    count = count +1;
-               
+                   
                     /*var idItemInBasket = JSON.parse(localStorage.getItem('tableauIdItem'));
                     idItemInBasket = [];
                     idItemInBasket.push(itemInStorage.idProduit);    
@@ -118,26 +118,38 @@ function getOursById(){
                     //objet existe mais on modifie la qté
                     produitsLocalStorage[testIndex].quantite= produitsLocalStorage[testIndex].quantite+1;
                     console.log(produitsLocalStorage[testIndex].quantite);
-                    count = count +1;
                 }
+
+
                 
                 localStorage.setItem('tableauItem', JSON.stringify(produitsLocalStorage));       
                 //itemInStorage = produitsLocalStorage.find(x => x.idProduit === data._id); 
                 //console.log('récup ligne prdt',produitsLocalStorage.find(x => x.idProduit === data._id));
+                
+                var count = 1;
+        
+                if(localStorage.getItem('productcount')){
+                    count = parseInt(localStorage.getItem('productcount')) + 1;
+                }
+               
+
                 localStorage.setItem('productcount', count); 
-                    
-                var productCount = document.getElementById('produit-count');
-                //console.log(productCount);
-                productCount.innerHTML = localStorage.getItem('productcount');
-                //console.log(localStorage.getItem('productcount'));
-            });
-         
-           
+                basketCount()
+            });       
         });
 };
 
+
+function basketCount(){
+    if(localStorage.getItem('productcount') && document.getElementById('produit-count')){
+    var productCount = document.getElementById('produit-count');
+    //console.log(productCount);
+    productCount.innerHTML = localStorage.getItem('productcount');   
+    } 
+};
+
+
 //console.log(localStorage.setItem('produit', 'my variable'));
-console.log(localStorage);
 //console.log(localStorage.getItem('tableauItem'));
 //console.log(JSON.parse(localStorage.getItem('tableauItem')));
 
@@ -422,6 +434,13 @@ function pageConfirmation(){
     document.location.href="./confirmation.html";
 };
 
+//récupération de la chaine de requête (querystring)
+var queryString = window.location.search;
+console.log(queryString);
+const urlSearchParams = new URLSearchParams(queryString);
+let idOurs = urlSearchParams.get('id');
+
+basketCount();
 if (idOurs){
     getOursById(idOurs);
     console.log('produit');
