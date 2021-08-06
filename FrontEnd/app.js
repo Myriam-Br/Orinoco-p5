@@ -1,7 +1,11 @@
 
 //--------------------------PAGE ACCUEIL-----------------
 //-------PROMISE DE TYPE GET -> getOursList-------------
+
+
 function getOursList(){
+console.log('GETOURSLIST');
+
     const promise1 = fetch('http://localhost:3000/api/teddies');
     console.log(promise1);
     promise1
@@ -131,10 +135,9 @@ function getOursById(idOurs){
                 if(localStorage.getItem('productcount')){
                     count = parseInt(localStorage.getItem('productcount')) + 1;
                 }
-               
 
                 localStorage.setItem('productcount', count); 
-                basketCount()
+                basketCount();
             });       
         });
 };
@@ -204,7 +207,7 @@ function myBasket(){
             console.log(totalPriceAmount);
             totalPriceAmount.innerHTML = totalPrice + '€';
         }   
-       console.log(produitsLocalStorage.length);
+      
     };
 
 };
@@ -436,16 +439,16 @@ function pageConfirmation(){
 
 //récupération de la chaine de requête (querystring)
 var queryString = window.location.search;
-console.log(queryString);
+//console.log(queryString);
 const urlSearchParams = new URLSearchParams(queryString);
 let idOurs = urlSearchParams.get('id');
-
+console.log(window.location.pathname);
 basketCount();
 if (idOurs){
     getOursById(idOurs);
     console.log('produit');
 
-}else if(window.location.pathname === "/FrontEnd/panier.html" || window.location.pathname == "/panier.html" || window.location.pathname =="/Orinoco-p5/FrontEnd/panier.html"){
+}else if(window.location.pathname === "/FrontEnd/panier.html" || window.location.pathname == "/panier.html" || window.location.pathname =="/Orinoco-p5/FrontEnd/panier.html" || window.location.pathname == "/projet5-Orinoco/projet5-Orinoco/FrontEnd/panier.html" ){
     console.log('panier');
     myBasket();
    
@@ -459,12 +462,11 @@ if (idOurs){
         dataBasketPost(sendForm);
     });
  
-}else if(window.location.pathname === "/FrontEnd/confirmation.html" || window.location.pathname == "/confirmation.html" || window.location.pathname =="/Orinoco-p5/FrontEnd/confirmation.html"){
+}else if(window.location.pathname === "/FrontEnd/confirmation.html" || window.location.pathname == "/confirmation.html" || window.location.pathname =="/Orinoco-p5/FrontEnd/confirmation.html" || window.location.pathname == "/projet5-Orinoco/projet5-Orinoco/FrontEnd/confirmation.html" ){
     validationCommande();
 
 }else{
     console.log('index');
     getOursList();
-
 };
 
