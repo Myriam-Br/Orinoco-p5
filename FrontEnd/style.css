@@ -117,12 +117,10 @@ h1{
     border: grey solid 2px;
     border-radius: 10px;
     padding-bottom: 10px;
-
 }
 .image{
 width: 100%;
-height: 75%;
-object-fit: cover;
+object-fit: scale-down;
 border-top-left-radius: 8px;
 border-top-right-radius: 8px;
 }
@@ -148,12 +146,14 @@ font-weight: 500;
     font-size: 16px;
 }
 
-/*style page produit btn-add-panier*/
-
+/*style page produit */
+.card-pdt{
+    height: fit-content;
+    padding-bottom: 20px;
+}
 #product-container{
     padding-top: 10px;
 }
-
 
 select{
     display: flex;

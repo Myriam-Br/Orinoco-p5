@@ -57,7 +57,7 @@ function getOursById(idOurs){
 
             const cardContainer = document.getElementById('card-container');
             var structureCard  = `
-            <div class="card">
+            <div class="card card-pdt">
             <img src="${data.imageUrl}" alt="" class="image">
             <div class="name">${data.name}</div>
             <div class="price">${data.price/100} <span>€</span></div>
@@ -416,9 +416,9 @@ function validationCommande(){
             //-----------CALCUL DU PRIX TOTAL-------------------
             totalPriceTable.push(produitsLocalStorage[j].price*produitsLocalStorage[j].quantite);
             const reducer = (accumulator, currentValue ) => accumulator + currentValue;
-            console.log(reducer);
+           // console.log(reducer);
             const totalPrice = totalPriceTable.reduce(reducer);
-            console.log("prix total", totalPrice);
+           // console.log("prix total", totalPrice);
             totalPriceField.innerHTML =  totalPrice + '€';
         }; 
     }
@@ -427,6 +427,15 @@ function validationCommande(){
     orderIdField.innerHTML = recupeOrderId;
 
 };
+
+function clearProductCount(){
+    localStorage.removeItem('tableauItem');
+    localStorage.removeItem('productcount');
+    localStorage.removeItem('idtab');
+    document.location.href="./index.html";
+};
+
+
 
 
 
@@ -463,8 +472,15 @@ if (idOurs){
     });
  
 }else if(window.location.pathname === "/FrontEnd/confirmation.html" || window.location.pathname == "/confirmation.html" || window.location.pathname =="/Orinoco-p5/FrontEnd/confirmation.html" || window.location.pathname == "/projet5-Orinoco/projet5-Orinoco/FrontEnd/confirmation.html" ){
-    validationCommande();
+    validationCommande();  
 
+    var backToHome= document.getElementById('retour-accueil');
+    backToHome.addEventListener('click', function(event){
+        event.preventDefault();
+        clearProductCount();
+    });
+
+    
 }else{
     console.log('index');
     getOursList();
