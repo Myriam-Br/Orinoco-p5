@@ -333,25 +333,27 @@ function dataBasketPost(sendForm){
     //console.log(produitsLocalStorage[1].idProduit);
 
     if(produitsLocalStorage==null){
-        produitsLocalStorage=[];
-        
-        
+        produitsLocalStorage=[];       
     }else{
         var idItemInBasket=[];        
         for(j=0; j < produitsLocalStorage.length; j++){
             idItemInBasket.push(produitsLocalStorage[j].idProduit);
             // console.log(idItemInBasket.push(produitsLocalStorage[j].idProduit));
         };
-
         localStorage.setItem('idtab', idItemInBasket.join());
+    };
+
+    if(idItemInBasket==null){
+        alert('votre panier est vide :(');
+        sendForm = false;  
     };
 
     //récuperation id produit local storage
     //qvar idItemLocalStorage = localStorage.getItem('tableauId');
-    if(idItemInBasket==[]){
+    /*if(idItemInBasket==[]){
     console.log('le panier est vide');
-    sendForm = false;  
-    };
+    
+    };*/
 
     if(sendForm){
         const promise3 =  fetch("http://localhost:3000/api/teddies/order",{
@@ -428,6 +430,7 @@ function validationCommande(){
 
 };
 
+//vider le panier après avoir passé la commande
 function clearProductCount(){
     localStorage.removeItem('tableauItem');
     localStorage.removeItem('productcount');
