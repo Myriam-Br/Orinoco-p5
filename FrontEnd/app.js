@@ -446,21 +446,26 @@ function clearProductCount(){
 
 //renvoie page confirmation (à changer)
 function pageConfirmation(){
-    document.location.href="./confirmation.html";
+    document.location.href="./confirmation.html?page=confirmation";
+    console.log(document.location);
 };
 
 //récupération de la chaine de requête (querystring)
 var queryString = window.location.search;
-//console.log(queryString);
+console.log(queryString);
+console.log(window.location.search);
 const urlSearchParams = new URLSearchParams(queryString);
 let idOurs = urlSearchParams.get('id');
-console.log(window.location.pathname);
+let page= urlSearchParams.get('page');
+
+
+
 basketCount();
 if (idOurs){
     getOursById(idOurs);
     console.log('produit');
 
-}else if(window.location.pathname === "/FrontEnd/panier.html" || window.location.pathname == "/panier.html" || window.location.pathname =="/Orinoco-p5/FrontEnd/panier.html" || window.location.pathname == "/projet5-Orinoco/projet5-Orinoco/FrontEnd/panier.html" ){
+}else if(page==="panier" ){
     console.log('panier');
     myBasket();
    
@@ -474,7 +479,7 @@ if (idOurs){
         dataBasketPost(sendForm);
     });
  
-}else if(window.location.pathname === "/FrontEnd/confirmation.html" || window.location.pathname == "/confirmation.html" || window.location.pathname =="/Orinoco-p5/FrontEnd/confirmation.html" || window.location.pathname == "/projet5-Orinoco/projet5-Orinoco/FrontEnd/confirmation.html" ){
+}else if(page==="confirmation" ){
     validationCommande();  
 
     var backToHome= document.getElementById('retour-accueil');
@@ -486,6 +491,7 @@ if (idOurs){
     
 }else{
     console.log('index');
+    console.log(document.location);
     getOursList();
 };
 
