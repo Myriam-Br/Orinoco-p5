@@ -300,7 +300,6 @@ padding: 10px;
 }
 .navFooter{
     margin-top: 10px;
-
 }
 .socials{
     display: flex;
@@ -320,6 +319,8 @@ padding: 10px;
 
 }
 @media screen and (min-width: 750px) and (max-width: 1250px) {
+
+  
     #card-container{
         flex-wrap: wrap;
         flex-direction: row;
@@ -381,6 +382,22 @@ padding: 10px;
         bottom: 0;
         width: 100%;
     }
+
+    footer{
+        display: flex;
+    }
+    .socials{
+        margin-top: 30px;
+    }
+
+    .navFooter{
+        display: flex;
+        list-style-type: square;
+    }
+    .navFooter li{
+        margin-right: 60px;
+        margin-top: 20px;
+    }
    
 }
 
@@ -394,10 +411,15 @@ padding: 10px;
     #navItems{
         font-size: 20px;
         justify-content: flex-end;
+        position: relative;
     }
 
     #navItems li{
        margin-right: 15px;
+    }
+
+    #navItems .logo-confirm img{
+        float: left;
     }
 
     .show-desktop{
@@ -495,6 +517,22 @@ padding: 10px;
         position: fixed;
         bottom: 0;
         width: 100%;
+    }
+
+    footer{
+        display: flex;
+    }
+    .socials{
+        margin-top: 30px;
+    }
+
+    .navFooter{
+        display: flex;
+        list-style-type: square;
+    }
+    .navFooter li{
+        margin-right: 60px;
+        margin-top: 20px;
     }
 
 
