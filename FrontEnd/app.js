@@ -1,21 +1,10 @@
-
-//--------------------------PAGE ACCUEIL-----------------
-//-------PROMISE DE TYPE GET -> getOursList-------------
-
-
+//-----------------Récupération de la liste des ours et création du html pour chaque ours ---------------
 function getOursList(){
-console.log('GETOURSLIST');
-
     const promise1 = fetch('http://localhost:3000/api/teddies');
-    console.log(promise1);
     promise1
     .then(res => res.json())
     .then(data =>{
-    console.log(data);
-    console.log(data.length);
-    console.log(data[1]._id);
-    
-        //put the content in a for... //
+
     for(i=0; i<data.length; i++){
         const cardContainer = document.getElementById('card-container');
         var structureCard  = `
@@ -29,6 +18,7 @@ console.log('GETOURSLIST');
         </a>
         </div>
         `;
+
         cardContainer.insertAdjacentHTML("beforeend" ,structureCard); 
         };
     });
@@ -37,18 +27,8 @@ console.log('GETOURSLIST');
 
 
 
-//----------PROMISE DE TYPE GET -> getOursById-------------
-
-
-
-
-//console.log(idOurs);
-
-//affichage du produit (de l'objet) qui a été sélectionné par l'id
-
-//--- Methode 1: avec fetch et en mettant la valeur de l'id à la fin de l'url
+//-----------------Récupération d'un ours à partir de l'id et création du html de l'ours spécifié------------
 function getOursById(idOurs){
-
 
     const promise2=  fetch ('http://localhost:3000/api/teddies/'+idOurs)
     promise2
@@ -68,39 +48,34 @@ function getOursById(idOurs){
             `;
 
             cardContainer.insertAdjacentHTML("beforeend" ,structureCard);
-            
+        
+            //création code html pour la sélection d'une couleur (menu déroulant)
             const colorsSelector= document.querySelector('.colors');
             var optionColor= data.colors;
                 let structureOptions =[];
-                console.log('democolor', optionColor);
+                
                 for (let i = 0; i< optionColor.length; i++){
                     structureOptions = structureOptions + `
                     <option> ${optionColor[i]}</option>
                     `;
                 };
             colorsSelector.innerHTML = structureOptions;
-            console.log(colorsSelector);
             
+
             var btnSelect = document.querySelector('.btn-add-to-basket');
-            console.log('btn', btnSelect);
-            
-            
 
             btnSelect.addEventListener('click', function(myCart){
                 myCart.preventDefault();
 
-                var colorSelected = colorsSelector.value;
-                console.log(colorSelected );
-            
-                 
+
                 //----------------STOCKAGE PRODUIT DU PANIER-------------
-                
+                var colorSelected = colorsSelector.value;
+
                 var produitsLocalStorage = JSON.parse(localStorage.getItem('tableauItem'));
                 if (produitsLocalStorage==undefined) {  
                     produitsLocalStorage = [];      
                 } 
                 
-
                 var testIndex = produitsLocalStorage.findIndex(x => x.idProduit === data._id && x.color === colorSelected);           
                 if(testIndex==-1){
                     
@@ -114,21 +89,12 @@ function getOursById(idOurs){
                     //objet n'existe pas dans le storage et il faut l'ajouter
                     produitsLocalStorage.push(itemInStorage); 
                    
-                    /*var idItemInBasket = JSON.parse(localStorage.getItem('tableauIdItem'));
-                    idItemInBasket = [];
-                    idItemInBasket.push(itemInStorage.idProduit);    
-                    localStorage.setItem('tableauIdItem', JSON.stringify(idItemInBasket));*/                      
                 }else{
                     //objet existe mais on modifie la qté
                     produitsLocalStorage[testIndex].quantite= produitsLocalStorage[testIndex].quantite+1;
-                    console.log(produitsLocalStorage[testIndex].quantite);
                 }
-
-
-                
+  
                 localStorage.setItem('tableauItem', JSON.stringify(produitsLocalStorage));       
-                //itemInStorage = produitsLocalStorage.find(x => x.idProduit === data._id); 
-                //console.log('récup ligne prdt',produitsLocalStorage.find(x => x.idProduit === data._id));
                 
                 var count = 1;
         
@@ -142,48 +108,35 @@ function getOursById(idOurs){
         });
 };
 
-
+//injection du compteur de produit dans le html (icon panier)
 function basketCount(){
     if(localStorage.getItem('productcount') && document.getElementById('produit-count')){
     var productCount = document.getElementById('produit-count');
-    //console.log(productCount);
     productCount.innerHTML = localStorage.getItem('productcount');   
     } 
 };
 
 
-//console.log(localStorage.setItem('produit', 'my variable'));
-//console.log(localStorage.getItem('tableauItem'));
-//console.log(JSON.parse(localStorage.getItem('tableauItem')));
-
-
-
-//-------------CREATION DU PANIER--------------
+//-------------Récupération élément du panier dans localStorage et création/remplissage du html de la page panier--------------
 function myBasket(){
   
+
     var produitsLocalStorage =JSON.parse(localStorage.getItem('tableauItem'));
-    //console.log('myBasket',produitsLocalStorage);
-   // console.log(produitsLocalStorage.length);
     
     var idItemInBasket = [];
     var totalPriceTable=[];
 
     if(produitsLocalStorage === null){
 
-        console.log('panier est vide');   
+       
     }else{  
-        //let productsInBasket = [];
-        //productsInBasket.push(produitsLocalStorage);     
-        console.log('id produitInBasket',idItemInBasket);
-        console.log('mybasket',produitsLocalStorage);
 
         for(j=0; j < produitsLocalStorage.length; j++){
 
-            //---------------AJOUT ID PRODUIT DANS TABLEAU ID--------------
+            //---------------ajout des id dans le localstorage (tableau id)--------------
             idItemInBasket.push(produitsLocalStorage[j].idProduit);
-            console.log(produitsLocalStorage[j].idProduit);
 
-            //-------------REMPLACER PRODUIT DU LOCALSTORAGE DANS LE HTML DU PANIER ------------
+            //-------------récupérer produits du localStorage et injecter dans le html de la page produit------------
             const itemBasket = document.getElementById('tbody');
             var structurePanier = `
             <tr class="tbody-item">
@@ -195,27 +148,20 @@ function myBasket(){
             `;
             itemBasket.insertAdjacentHTML('beforeend', structurePanier); 
   
-            //-----------CALCUL DU PRIX TOTAL-------------------
+            //-----------récupération prix produits du localStorage et calcul du prix total -------------------
             totalPriceTable.push(produitsLocalStorage[j].price*produitsLocalStorage[j].quantite);
             const reducer = (accumulator, currentValue ) => accumulator + currentValue;
-            console.log(reducer);
-    
             const totalPrice = totalPriceTable.reduce(reducer);
-            console.log("prix total", totalPrice);
-        
             var totalPriceAmount = document.getElementById('total-price-amount');
-            console.log(totalPriceAmount);
             totalPriceAmount.innerHTML = totalPrice + '€';
-        }   
-      
+        }     
     };
-
 };
 
-//----------------- STOCKAGE DATA USERS--------------
+//----------------- Stockage des données users dans le localStorage (uniquement si elles sont valides)--------------
 function dataUser(){
 
-    //récupération élément form du DOM
+    //récupération élément du formumaire du DOM
     var userFirstName = document.getElementById('user-first-name');
     userFirstName = userFirstName.value;
 
@@ -231,10 +177,10 @@ function dataUser(){
     var userEmail = document.getElementById('user-email');
     userEmail = userEmail.value;
 
-    var sendForm = true;
-    //-----------------verification du formulaire---------------//
+    var sendForm = true; //paramètre utiliser pour valider l'envoie (si faux la confirmation de la commande n'est pas autorisée)
 
-    
+
+    //-----------------verification du formulaire---------------//
 
     //verification firstName
     let requireFirstName = document.getElementById('require-firstname');
@@ -247,7 +193,6 @@ function dataUser(){
         sendForm = false
     }else{
         //stockage userfirstname 
-        console.log('prénom enregistré');
         requireFirstName.innerHTML = "";  
         localStorage.setItem('userFirstName', userFirstName);    
     };
@@ -262,7 +207,7 @@ function dataUser(){
         sendForm = false
     }else{
         //stockage userlastname 
-        console.log('nom enregistré');
+      
         requireLastName.innerHTML = ""; 
         localStorage.setItem('userLastName', userLastName);
     };
@@ -278,7 +223,7 @@ function dataUser(){
         sendForm = false
     }else{
         //stockage useradress 
-        console.log('adresse enregistré');
+        
         requireAdress.innerHTML = "";
         localStorage.setItem('userAdress', userAddress);
     };
@@ -294,14 +239,14 @@ function dataUser(){
         sendForm = false
     }else{
         //stockage usercity
-        console.log('ville enregistré');
+        
         requireCity.innerHTML = ""; 
         localStorage.setItem('userCity', userCity);
     };
 
     //verification email
     let requireEmail = document.getElementById('require-email');
-    var emailFilter = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    var emailFilter =  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if(userEmail == ""){
         requireEmail.innerHTML = "Veuillez entrer votre email"; 
         sendForm = false;       
@@ -312,25 +257,18 @@ function dataUser(){
     }else{
         //stockage useremail
         requireEmail.innerHTML = ""; 
-        console.log('email enregistré');
         localStorage.setItem('userEmail', userEmail);
     };
 
-    return sendForm;
+    return sendForm; //si tous les critères sont valide, on renvoie sendForm = vrai -> l'envoie pourra être effectué
 };
 
 
-//dataUser();
-//console.log(userProfil);
 
-//------------------PROMISE DE TYPE POST---------------------
-
+//------------récupération données contact et produit du localStorage envoie de ces éléments avec la méthode POST (envoie uniquement si le formulaire est valide)----------
 function dataBasketPost(sendForm){
-    //---------recupérer idProduit localStorage dans POST----------
+    
     var produitsLocalStorage = JSON.parse(localStorage.getItem('tableauItem'));
-    //var idItemLocalStorage = localStorage.getItem('tableauId');
-    //console.log(produitsLocalStorage);
-    //console.log(produitsLocalStorage[1].idProduit);
 
     if(produitsLocalStorage==null){
         produitsLocalStorage=[];       
@@ -338,8 +276,8 @@ function dataBasketPost(sendForm){
         var idItemInBasket=[];        
         for(j=0; j < produitsLocalStorage.length; j++){
             idItemInBasket.push(produitsLocalStorage[j].idProduit);
-            // console.log(idItemInBasket.push(produitsLocalStorage[j].idProduit));
         };
+
         localStorage.setItem('idtab', idItemInBasket.join());
     };
 
@@ -348,13 +286,9 @@ function dataBasketPost(sendForm){
         sendForm = false;  
     };
 
-    //récuperation id produit local storage
-    //qvar idItemLocalStorage = localStorage.getItem('tableauId');
-    /*if(idItemInBasket==[]){
-    console.log('le panier est vide');
-    
-    };*/
 
+
+    //si le paramètre sendForm = vrai -> les données stockées dans le localStorage pourront être envoyé avec la méthode post
     if(sendForm){
         const promise3 =  fetch("http://localhost:3000/api/teddies/order",{
         method: 'POST',
@@ -375,31 +309,26 @@ function dataBasketPost(sendForm){
             products:localStorage.getItem('idtab').split(','),   
         })   
     });
-    console.log(promise3);
 
         promise3
         .then (res=>res.json())
         .then (data=>{
-        console.log(data);
+
         //récupération orderId
         localStorage.setItem('orderId',data.orderId); 
         pageConfirmation();
         });
-
-
     };
-
 }
  
 
 //--------------structure page de commande-------------
 function validationCommande(){
-    //console.log(JSON.parse(localStorage.getItem('dataUsers')));
+  
+    //récupération des éléments du localStorage (firstname , produits(pour calcul du prix total), orderId)
     var userFirstNameStorage = localStorage.getItem('userFirstName');
     var produitsLocalStorage =JSON.parse(localStorage.getItem('tableauItem'));
     var recupeOrderId = localStorage.getItem('orderId');
-    console.log(recupeOrderId);
-    
 
     //récupération éléments du DOM
     var firstNameField = document.getElementById('user-first-name');
@@ -407,7 +336,7 @@ function validationCommande(){
     var orderIdField = document.getElementById('orderId');
     var totalPriceTable =[];
 
-    //-----remplacement contenu élément du DOM----------
+    //-----remplissage contenu élément du DOM----------
 
         //firstname
     firstNameField.innerHTML = userFirstNameStorage;
@@ -418,9 +347,7 @@ function validationCommande(){
             //-----------CALCUL DU PRIX TOTAL-------------------
             totalPriceTable.push(produitsLocalStorage[j].price*produitsLocalStorage[j].quantite);
             const reducer = (accumulator, currentValue ) => accumulator + currentValue;
-           // console.log(reducer);
             const totalPrice = totalPriceTable.reduce(reducer);
-           // console.log("prix total", totalPrice);
             totalPriceField.innerHTML =  totalPrice + '€';
         }; 
     }
@@ -438,41 +365,40 @@ function clearProductCount(){
     document.location.href="./index.html";
 };
 
-
-
-
-
-//-------------REDIRECTION VERS LES DIFFERENTES PAGES DU SITE-----------//
-
-//renvoie page confirmation (à changer)
+//renvoie page confirmation 
 function pageConfirmation(){
     document.location.href="./confirmation.html?page=confirmation";
-    console.log(document.location);
+   
 };
+
+
+
+
+
+
+
+
+
+
+
+//-------------Routeur (affichage page du site en fonction de l'url-------//
 
 //récupération de la chaine de requête (querystring)
 var queryString = window.location.search;
-console.log(queryString);
-console.log(window.location.search);
 const urlSearchParams = new URLSearchParams(queryString);
 let idOurs = urlSearchParams.get('id');
 let page= urlSearchParams.get('page');
 
 
-
 basketCount();
 if (idOurs){
     getOursById(idOurs);
-    console.log('produit');
 
 }else if(page==="panier" ){
-    console.log('panier');
     myBasket();
    
-    //----------------ENVOIE DONNEE USER FORM VERS LOCAL STORAGE------------------
+    //------------écouter événement et lancer fontion valider (envoie des données uniquement si le formulaire est valide --------
     var btnValider = document.getElementById('btn-valider');
-    console.log('mybtn', btnValider);
-    //------------écouter événement et lancer fontion valider--------
     btnValider.addEventListener('click', async function(event){
         event.preventDefault();
         var sendForm = await dataUser();
@@ -482,16 +408,14 @@ if (idOurs){
 }else if(page==="confirmation" ){
     validationCommande();  
 
+    //------------écouter événement et vider le panier--------
     var backToHome= document.getElementById('retour-accueil');
     backToHome.addEventListener('click', function(event){
         event.preventDefault();
         clearProductCount();
-    });
+    });    
 
-    
 }else{
-    console.log('index');
-    console.log(document.location);
     getOursList();
 };
 
