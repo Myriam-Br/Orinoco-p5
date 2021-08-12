@@ -52,7 +52,7 @@ function getOursById(idOurs){
             //création code html pour la sélection d'une couleur (menu déroulant)
             const colorsSelector= document.querySelector('.colors');
             var optionColor= data.colors;
-                let structureOptions =[];
+                let structureOptions = [];
                 
                 for (let i = 0; i< optionColor.length; i++){
                     structureOptions = structureOptions + `
@@ -79,8 +79,6 @@ function getOursById(idOurs){
                     for(j=0; j < produitsLocalStorage.length; j++){
                         idItemInBasket.push(produitsLocalStorage[j].idProduit);
                     };
-            
-                    localStorage.setItem('idtab', idItemInBasket.join());
                 }
 
                 var testIndex = produitsLocalStorage.findIndex(x => x.idProduit === data._id && x.color === colorSelected);           
@@ -276,10 +274,22 @@ function dataBasketPost(sendForm){
     
 
     //si le tableau id du localStorage est vide on interdit l'envoie de la methode post (sendForm = false) et on affiche une alerte
-    var idItemInBasket = localStorage.getItem('idtab');
+    var produitsLocalStorage = JSON.parse(localStorage.getItem('tableauItem'));
+
+    if(produitsLocalStorage==null){
+        produitsLocalStorage=[];       
+    }else{
+        var idItemInBasket=[];        
+        for(j=0; j < produitsLocalStorage.length; j++){
+            idItemInBasket.push(produitsLocalStorage[j].idProduit);
+        };
+
+        localStorage.setItem('idtab', idItemInBasket.join());
+    };
+    
     if(idItemInBasket==null){ 
-        alert('votre panier est vide :(');
-        sendForm = false;  
+    alert('votre panier est vide :(');
+    sendForm = false;  
     };
 
     
