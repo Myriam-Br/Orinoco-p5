@@ -79,6 +79,8 @@ function getOursById(idOurs){
                     for(j=0; j < produitsLocalStorage.length; j++){
                         idItemInBasket.push(produitsLocalStorage[j].idProduit);
                     };
+
+                    localStorage.setItem('idtab', idItemInBasket.join());
                 }
 
                 var testIndex = produitsLocalStorage.findIndex(x => x.idProduit === data._id && x.color === colorSelected);           
