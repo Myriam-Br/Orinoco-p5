@@ -74,11 +74,17 @@ function getOursById(idOurs){
                 var produitsLocalStorage = JSON.parse(localStorage.getItem('tableauItem'));
                 if (produitsLocalStorage==undefined) {  
                     produitsLocalStorage = [];      
-                } 
-                
+                } else{
+                    var idItemInBasket=[];        
+                    for(j=0; j < produitsLocalStorage.length; j++){
+                        idItemInBasket.push(produitsLocalStorage[j].idProduit);
+                    };
+            
+                    localStorage.setItem('idtab', idItemInBasket.join());
+                }
+
                 var testIndex = produitsLocalStorage.findIndex(x => x.idProduit === data._id && x.color === colorSelected);           
-                if(testIndex==-1){
-                    
+                if(testIndex==-1){ 
                     var itemInStorage ={
                         idProduit:data._id,
                         name:data.name,
@@ -101,9 +107,10 @@ function getOursById(idOurs){
                 if(localStorage.getItem('productcount')){
                     count = parseInt(localStorage.getItem('productcount')) + 1;
                 }
-
                 localStorage.setItem('productcount', count); 
+
                 basketCount();
+
             });       
         });
 };
@@ -127,7 +134,6 @@ function myBasket(){
     var totalPriceTable=[];
 
     if(produitsLocalStorage === null){
-
        
     }else{  
 
@@ -268,26 +274,15 @@ function dataUser(){
 //------------récupération données contact et produit du localStorage envoie de ces éléments avec la méthode POST (envoie uniquement si le formulaire est valide)----------
 function dataBasketPost(sendForm){
     
-    var produitsLocalStorage = JSON.parse(localStorage.getItem('tableauItem'));
 
-    if(produitsLocalStorage==null){
-        produitsLocalStorage=[];       
-    }else{
-        var idItemInBasket=[];        
-        for(j=0; j < produitsLocalStorage.length; j++){
-            idItemInBasket.push(produitsLocalStorage[j].idProduit);
-        };
-
-        localStorage.setItem('idtab', idItemInBasket.join());
-    };
-
-    if(idItemInBasket==null){
+    //si le tableau id du localStorage est vide on interdit l'envoie de la methode post (sendForm = false) et on affiche une alerte
+    var idItemInBasket = localStorage.getItem('idtab');
+    if(idItemInBasket==null){ 
         alert('votre panier est vide :(');
         sendForm = false;  
     };
 
-
-
+    
     //si le paramètre sendForm = vrai -> les données stockées dans le localStorage pourront être envoyé avec la méthode post
     if(sendForm){
         const promise3 =  fetch("http://localhost:3000/api/teddies/order",{
@@ -334,14 +329,14 @@ function validationCommande(){
     var firstNameField = document.getElementById('user-first-name');
     var totalPriceField = document.getElementById('total-price-field'); 
     var orderIdField = document.getElementById('orderId');
-    var totalPriceTable =[];
-
+   
     //-----remplissage contenu élément du DOM----------
 
         //firstname
     firstNameField.innerHTML = userFirstNameStorage;
     
         //totalprice
+    var totalPriceTable =[];
     if(produitsLocalStorage){
         for(j=0; j<produitsLocalStorage.length; j++){      
             //-----------CALCUL DU PRIX TOTAL-------------------
@@ -370,13 +365,6 @@ function pageConfirmation(){
     document.location.href="./confirmation.html?page=confirmation";
    
 };
-
-
-
-
-
-
-
 
 
 
