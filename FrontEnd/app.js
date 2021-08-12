@@ -80,7 +80,7 @@ function getOursById(idOurs){
                         idItemInBasket.push(produitsLocalStorage[j].idProduit);
                     };
 
-                    localStorage.setItem('idtab', idItemInBasket.join());
+
                 }
 
                 var testIndex = produitsLocalStorage.findIndex(x => x.idProduit === data._id && x.color === colorSelected);           
